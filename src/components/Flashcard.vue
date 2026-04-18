@@ -20,7 +20,7 @@ defineExpose({ revealed });
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col items-center justify-center px-4">
+  <div class="flex flex-col items-center justify-center px-4">
     <div class="card w-full max-w-md text-center">
       <p class="hanzi text-7xl font-semibold tracking-wide">{{ card.simplified }}</p>
 

@@ -56,7 +56,7 @@ function check() {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col gap-4">
+  <div class="flex flex-col gap-4">
     <div class="card">
       <p class="text-xs uppercase tracking-wide text-slate-500">Phrase à reformer</p>
       <p class="mt-2 text-lg italic text-slate-200">« {{ sentence.fr }} »</p>
@@ -110,7 +110,7 @@ function check() {
       <p class="mt-1 text-base text-brand-500">{{ sentencePinyin }}</p>
     </div>
 
-    <div class="mt-auto flex gap-2">
+    <div class="flex gap-2">
       <button v-if="result === 'pending'" class="btn-ghost flex-1" @click="emit('skip')">Passer</button>
       <button
         v-if="result === 'pending'"

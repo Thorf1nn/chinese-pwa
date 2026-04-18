@@ -133,7 +133,7 @@ async function nextQuizCard() {
 </script>
 
 <template>
-  <section class="mx-auto flex h-[calc(100vh-9rem)] max-w-md flex-col gap-4 px-4 pt-4">
+  <section class="mx-auto flex min-h-full max-w-md flex-col gap-4 px-4 pt-4 pb-4">
     <header class="flex items-center justify-between">
       <h1 class="text-2xl font-bold">Révision</h1>
       <div class="flex items-center gap-2 text-xs">
@@ -172,7 +172,7 @@ async function nextQuizCard() {
 
     <template v-if="current && mode === 'classic' && intervals">
       <Flashcard ref="flashcard" :card="current" />
-      <div class="mt-auto">
+      <div>
         <ReviewButtons
           v-if="flashcard?.revealed"
           :intervals="intervals"
@@ -188,7 +188,7 @@ async function nextQuizCard() {
       <QuizCard :question="quizQuestion" @done="onQuizDone" />
       <button
         v-if="quizRating"
-        class="btn-primary mt-auto"
+        class="btn-primary"
         @click="nextQuizCard"
       >
         Suivant →

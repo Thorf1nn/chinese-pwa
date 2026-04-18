@@ -54,7 +54,7 @@ function optionClass(face: QuizFace, card: Card, answerId: string | null): strin
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col gap-6">
+  <div class="flex flex-col gap-6">
     <div class="card text-center">
       <p class="text-xs uppercase tracking-wide text-slate-500">
         {{ faceLabel(question.visibleFace) }}
