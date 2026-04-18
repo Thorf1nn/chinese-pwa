@@ -144,13 +144,7 @@ export const useDeckStore = defineStore('deck', () => {
     await db.reviews.add({ cardId, ...log, wasNew });
     cards.value.splice(idx, 1, plainCard);
     if (wasNew) newSeenToday.value = newSeenToday.value + 1;
-    console.log('[submitReview]', {
-      wasNew,
-      rating,
-      newState: plainCard.state,
-      newSeenToday: newSeenToday.value,
-      newLeftToday: Math.max(0, newCardsPerDay.value - newSeenToday.value),
-    });
+    now.value = Date.now();
   }
 
   function cardById(id: string) {
@@ -160,7 +154,7 @@ export const useDeckStore = defineStore('deck', () => {
   const now = ref(Date.now());
   setInterval(() => {
     now.value = Date.now();
-  }, 30_000);
+  }, 10_000);
 
   const dueReviewCards = computed(() =>
     cards.value
