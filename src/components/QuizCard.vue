@@ -40,7 +40,7 @@ function pickSecond(card: Card) {
   setTimeout(() => {
     step.value = 'done';
     emit('done', total as 0 | 1 | 2);
-  }, 900);
+  }, 500);
 }
 
 function optionClass(face: QuizFace, card: Card, answerId: string | null): string {

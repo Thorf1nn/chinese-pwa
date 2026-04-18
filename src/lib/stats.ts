@@ -1,4 +1,4 @@
-import { db, type Card, type ReviewLog, type SentenceReview } from './db';
+import { db, type Card, type ReviewLog, type SentenceLog } from './db';
 
 export function startOfDay(ts: number = Date.now()): number {
   const d = new Date(ts);
@@ -38,9 +38,9 @@ export interface SentencesTodaySummary {
 
 export async function getSentencesTodaySummary(inQueue: number): Promise<SentencesTodaySummary> {
   const since = startOfDay();
-  const logs = await db.sentenceReviews.where('reviewedAt').aboveOrEqual(since).toArray();
-  const attempted = logs.filter((l) => l.result !== 'skipped').length;
-  const correct = logs.filter((l) => l.result === 'correct').length;
+  const logs = await db.sentenceLogs.where('reviewedAt').aboveOrEqual(since).toArray();
+  const attempted = logs.length;
+  const correct = logs.filter((l) => l.rating >= 3).length;
   const rate = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
   return { attempted, successRate: rate, inQueue };
 }
@@ -102,27 +102,30 @@ export interface SentenceLeech {
 }
 
 export async function findSentenceLeeches(limit = 10): Promise<SentenceLeech[]> {
-  const all = await db.sentenceReviews.toArray();
-  const map = new Map<string, SentenceLeech>();
-  for (const r of all) {
-    if (r.result === 'skipped') continue;
-    const existing = map.get(r.zh);
-    if (existing) {
-      existing.attempts += 1;
-      if (r.result === 'wrong') existing.failures += 1;
-      if (r.reviewedAt > existing.lastReviewedAt) existing.lastReviewedAt = r.reviewedAt;
-    } else {
-      map.set(r.zh, {
-        zh: r.zh,
-        fr: r.fr,
-        failures: r.result === 'wrong' ? 1 : 0,
-        attempts: 1,
-        lastReviewedAt: r.reviewedAt,
-      });
-    }
+  const cards = await db.sentenceCards.toArray();
+  const logs = await db.sentenceLogs.toArray();
+
+  const stats = new Map<string, { attempts: number; failures: number; lastReviewedAt: number }>();
+  for (const l of logs) {
+    const s = stats.get(l.zh) ?? { attempts: 0, failures: 0, lastReviewedAt: 0 };
+    s.attempts += 1;
+    if (l.rating === 1) s.failures += 1;
+    if (l.reviewedAt > s.lastReviewedAt) s.lastReviewedAt = l.reviewedAt;
+    stats.set(l.zh, s);
   }
-  return Array.from(map.values())
-    .filter((s) => s.failures >= 2)
+
+  return cards
+    .filter((c) => c.lapses >= 2 || c.difficulty > 7)
+    .map((c) => {
+      const s = stats.get(c.zh);
+      return {
+        zh: c.zh,
+        fr: c.fr,
+        failures: s?.failures ?? c.lapses,
+        attempts: s?.attempts ?? c.reps,
+        lastReviewedAt: s?.lastReviewedAt ?? c.last_review ?? c.createdAt,
+      };
+    })
     .sort((a, b) => {
       if (b.failures !== a.failures) return b.failures - a.failures;
       return b.lastReviewedAt - a.lastReviewedAt;
@@ -140,7 +143,7 @@ export interface HeatmapDay {
 export async function buildHeatmap(days = 90): Promise<HeatmapDay[]> {
   const earliest = startOfDay() - (days - 1) * 86400000;
   const cardLogs = await db.reviews.where('reviewedAt').aboveOrEqual(earliest).toArray();
-  const sentenceLogs = await db.sentenceReviews
+  const sentenceLogs = await db.sentenceLogs
     .where('reviewedAt')
     .aboveOrEqual(earliest)
     .toArray();
@@ -152,7 +155,6 @@ export async function buildHeatmap(days = 90): Promise<HeatmapDay[]> {
   }
   const sentenceMap = new Map<string, number>();
   for (const l of sentenceLogs) {
-    if (l.result === 'skipped') continue;
     const key = dateKey(startOfDay(l.reviewedAt));
     sentenceMap.set(key, (sentenceMap.get(key) ?? 0) + 1);
   }
@@ -209,22 +211,24 @@ export interface SentencesGlobalStats {
   uniqueSeen: number;
   totalAttempts: number;
   successRate: number;
+  retention: number;
 }
 
 export async function getSentencesGlobalStats(): Promise<SentencesGlobalStats> {
-  const all = await db.sentenceReviews.toArray();
-  const realAttempts = all.filter((l) => l.result !== 'skipped');
-  const correct = realAttempts.filter((l) => l.result === 'correct').length;
-  const unique = new Set(realAttempts.map((l) => l.zh));
+  const cards = await db.sentenceCards.count();
+  const logs = await db.sentenceLogs.toArray();
+  const correct = logs.filter((l) => l.rating >= 3).length;
+  const retention = logs.length > 0 ? Math.round((correct / logs.length) * 100) : 0;
   return {
-    uniqueSeen: unique.size,
-    totalAttempts: realAttempts.length,
-    successRate: realAttempts.length > 0 ? Math.round((correct / realAttempts.length) * 100) : 0,
+    uniqueSeen: cards,
+    totalAttempts: logs.length,
+    successRate: retention,
+    retention,
   };
 }
 
-export async function logSentenceReview(entry: Omit<SentenceReview, 'id'>): Promise<void> {
-  await db.sentenceReviews.add(entry as SentenceReview);
+export async function logSentenceReview(_entry: unknown): Promise<void> {
+  // Legacy no-op : les reviews de phrases passent maintenant par submitSentenceReview.
 }
 
 function dateKey(ts: number): string {

@@ -3,9 +3,10 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useDeckStore } from '../stores/deck';
 import { previewIntervals, type ReviewRating } from '../lib/fsrs';
-import { buildQuizQuestion, scoreToRating, type QuizQuestion } from '../lib/quiz';
+import { buildQuizQuestion, type QuizQuestion } from '../lib/quiz';
 import { loadSentences, pickSentence, type SentenceItem } from '../lib/sentences';
-import { logSentenceReview } from '../lib/stats';
+import { submitSentenceReview, type SentenceRating } from '../lib/sentence-fsrs';
+type _KeepRating = SentenceRating;
 import Flashcard from '../components/Flashcard.vue';
 import ReviewButtons from '../components/ReviewButtons.vue';
 import QuizCard from '../components/QuizCard.vue';
@@ -24,7 +25,8 @@ const deck = useDeckStore();
 const flashcard = ref<InstanceType<typeof Flashcard> | null>(null);
 const mode = ref<Mode>(readMode());
 const quizQuestion = ref<QuizQuestion | null>(null);
-const quizRating = ref<ReviewRating | null>(null);
+const quizDone = ref(false);
+const quizCorrectCount = ref<0 | 1 | 2>(0);
 const showFullCard = ref(false);
 const sentencePool = ref<SentenceItem[] | null>(null);
 const SENTENCE_QUEUE_KEY = 'chinese-pwa:sentenceQueue';
@@ -116,9 +118,10 @@ watch(
   [current, mode],
   ([card, m]) => {
     showFullCard.value = false;
+    quizDone.value = false;
+    quizCorrectCount.value = 0;
     if (m === 'quiz' && card && canQuiz.value) {
       quizQuestion.value = buildQuizQuestion(card, deck.cards);
-      quizRating.value = null;
     } else {
       quizQuestion.value = null;
     }
@@ -131,45 +134,40 @@ async function rate(r: ReviewRating) {
   await deck.submitReview(current.value.id, r);
 }
 
-async function onQuizDone(correct: 0 | 1 | 2) {
-  quizRating.value = scoreToRating(correct);
+function onQuizDone(correct: 0 | 1 | 2) {
+  quizCorrectCount.value = correct;
+  quizDone.value = true;
 }
 
-async function nextQuizCard() {
-  if (!current.value || !quizRating.value) return;
-  await deck.submitReview(current.value.id, quizRating.value);
-  quizRating.value = null;
+async function rateFromQuiz(r: ReviewRating) {
+  if (!current.value) return;
+  await deck.submitReview(current.value.id, r);
+  quizDone.value = false;
   showFullCard.value = false;
 }
 
-function requeueAndNextWithLog(failed: SentenceItem) {
-  logSentenceReview({
-    zh: failed.zh,
-    fr: failed.fr,
-    result: 'wrong',
-    reviewedAt: Date.now(),
-  });
-  requeueAndNext(failed);
-}
+const quizAllowedRatings = computed<ReviewRating[]>(() =>
+  quizCorrectCount.value === 2 ? [2, 3, 4] : [1, 2]
+);
 
-function nextSentenceWithLog(success: boolean, currentZh?: string, currentFr?: string) {
-  if (currentZh && currentFr) {
-    logSentenceReview({
-      zh: currentZh,
-      fr: currentFr,
-      result: success ? 'correct' : 'skipped',
-      reviewedAt: Date.now(),
-    });
+const quizIntervals = computed(() => (current.value ? previewIntervals(current.value) : null));
+
+async function onSentenceRated(s: SentenceItem, rating: SentenceRating) {
+  await submitSentenceReview(s.zh, s.fr, s.tokens, rating);
+  if (rating === 1) {
+    sentenceQueue.value.push(s);
+    const next =
+      sentenceQueue.value.length > SENTENCE_REQUEUE_OFFSET
+        ? sentenceQueue.value.shift() ?? null
+        : freshSentence();
+    currentSentence.value = next;
+  } else {
+    nextSentence();
   }
+}
+
+function onSentenceSkip() {
   nextSentence();
-}
-
-function onSentenceCorrect(s: SentenceItem) {
-  nextSentenceWithLog(true, s.zh, s.fr);
-}
-
-function onSentenceSkip(s: SentenceItem) {
-  nextSentenceWithLog(false, s.zh, s.fr);
 }
 </script>
 
@@ -222,13 +220,40 @@ function onSentenceSkip(s: SentenceItem) {
 
     <template v-else-if="current && mode === 'quiz' && quizQuestion">
       <QuizCard :question="quizQuestion" @done="onQuizDone" />
-      <div v-if="quizRating" class="flex flex-col gap-2">
+      <div v-if="quizDone && quizIntervals" class="flex flex-col gap-3">
+        <p class="text-center text-xs text-slate-500">
+          <span v-if="quizCorrectCount === 2" class="text-emerald-400">2/2 bons — comment tu t'en es sorti ?</span>
+          <span v-else-if="quizCorrectCount === 1" class="text-amber-400">1/2 — à revoir bientôt</span>
+          <span v-else class="text-red-400">0/2 — on recommence</span>
+        </p>
+        <div class="grid gap-2" :class="quizAllowedRatings.length === 2 ? 'grid-cols-2' : 'grid-cols-3'">
+          <button
+            v-for="r in quizAllowedRatings"
+            :key="r"
+            class="flex flex-col items-center gap-1 rounded-lg py-3 text-white transition active:scale-95"
+            :class="{
+              'bg-red-600 hover:bg-red-500': r === 1,
+              'bg-orange-500 hover:bg-orange-400': r === 2,
+              'bg-emerald-600 hover:bg-emerald-500': r === 3,
+              'bg-sky-600 hover:bg-sky-500': r === 4,
+            }"
+            @click="rateFromQuiz(r)"
+          >
+            <span class="text-xs font-semibold uppercase tracking-wide">
+              <span v-if="r === 1">Encore</span>
+              <span v-else-if="r === 2">Difficile</span>
+              <span v-else-if="r === 3">Bien</span>
+              <span v-else>Facile</span>
+            </span>
+            <span class="text-xs opacity-80">{{ quizIntervals[r] }}</span>
+          </button>
+        </div>
         <button
           v-if="!showFullCard && current.sentences.length"
           class="btn-ghost text-sm"
           @click="showFullCard = true"
         >
-          👁 Voir la carte complète
+          👁 Voir les exemples
         </button>
         <div v-if="showFullCard" class="card text-left">
           <p class="text-xs uppercase tracking-wide text-slate-500">Exemples</p>
@@ -242,7 +267,6 @@ function onSentenceSkip(s: SentenceItem) {
             <p v-if="s.source" class="text-xs text-slate-500">— {{ s.source }}</p>
           </div>
         </div>
-        <button class="btn-primary" @click="nextQuizCard">Suivant →</button>
       </div>
     </template>
 
@@ -250,8 +274,7 @@ function onSentenceSkip(s: SentenceItem) {
       <SentenceBuilder
         v-if="currentSentence"
         :sentence="currentSentence"
-        @next="onSentenceCorrect"
-        @failed="requeueAndNextWithLog"
+        @rated="onSentenceRated"
         @skip="onSentenceSkip"
       />
       <div v-else class="flex flex-1 items-center justify-center text-slate-500">

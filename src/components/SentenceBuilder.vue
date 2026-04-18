@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { SentenceItem } from '../lib/sentences';
 import { shuffleTokens } from '../lib/sentences';
+import { getOrCreateSentenceCard, previewSentenceIntervals, type SentenceRating } from '../lib/sentence-fsrs';
+import type { SentenceCard } from '../lib/db';
 
 const props = defineProps<{ sentence: SentenceItem }>();
-const emit = defineEmits<{ next: [SentenceItem]; failed: [SentenceItem]; skip: [SentenceItem] }>();
+const emit = defineEmits<{
+  rated: [SentenceItem, SentenceRating];
+  skip: [SentenceItem];
+}>();
 
 interface Token {
   uid: string;
@@ -15,10 +20,19 @@ const available = ref<Token[]>([]);
 const built = ref<Token[]>([]);
 const result = ref<'pending' | 'correct' | 'wrong'>('pending');
 const sentencePinyin = ref<string>('');
+const fsrsCard = ref<SentenceCard | null>(null);
 
 async function computeSentencePinyin() {
   const { pinyin } = await import('pinyin-pro');
   sentencePinyin.value = pinyin(props.sentence.zh, { toneType: 'symbol', type: 'string' });
+}
+
+async function loadFsrsCard() {
+  fsrsCard.value = await getOrCreateSentenceCard(
+    props.sentence.zh,
+    props.sentence.fr,
+    props.sentence.tokens
+  );
 }
 
 function reset() {
@@ -27,6 +41,8 @@ function reset() {
   built.value = [];
   result.value = 'pending';
   sentencePinyin.value = '';
+  fsrsCard.value = null;
+  loadFsrsCard();
 }
 
 function builtMatchesTarget(): boolean {
@@ -53,6 +69,17 @@ function check() {
   computeSentencePinyin();
 }
 
+const intervals = computed(() =>
+  fsrsCard.value ? previewSentenceIntervals(fsrsCard.value) : null
+);
+
+const allowedRatings = computed<SentenceRating[]>(() =>
+  result.value === 'correct' ? [2, 3, 4] : [1, 2]
+);
+
+function rate(r: SentenceRating) {
+  emit('rated', props.sentence, r);
+}
 </script>
 
 <template>
@@ -101,7 +128,6 @@ function check() {
       <p class="text-sm text-red-300">Pas tout à fait. La bonne phrase :</p>
       <p class="hanzi mt-2 text-2xl">{{ sentence.zh }}</p>
       <p class="mt-1 text-base text-brand-500">{{ sentencePinyin }}</p>
-      <p class="mt-2 text-xs text-slate-500">Tu la reverras dans quelques phrases.</p>
     </div>
 
     <div v-if="result === 'correct'" class="card text-center">
@@ -110,20 +136,44 @@ function check() {
       <p class="mt-1 text-base text-brand-500">{{ sentencePinyin }}</p>
     </div>
 
-    <div class="flex gap-2">
-      <button v-if="result === 'pending'" class="btn-ghost flex-1" @click="emit('skip', sentence)">Passer</button>
+    <div v-if="result === 'pending'" class="flex gap-2">
+      <button class="btn-ghost flex-1" @click="emit('skip', sentence)">Passer</button>
       <button
-        v-if="result === 'pending'"
         class="btn-primary flex-1"
         :disabled="built.length !== sentence.tokens.length"
         @click="check"
       >
         Valider
       </button>
-      <button v-else-if="result === 'wrong'" class="btn-primary flex-1" @click="emit('failed', sentence)">
-        Suivant →
-      </button>
-      <button v-else class="btn-primary flex-1" @click="emit('next', sentence)">Suivant →</button>
+    </div>
+
+    <div v-else-if="intervals" class="flex flex-col gap-2">
+      <p class="text-center text-xs text-slate-500">
+        <span v-if="result === 'correct'">Comment tu l'as sentie ?</span>
+        <span v-else>À revoir bientôt</span>
+      </p>
+      <div class="grid gap-2" :class="allowedRatings.length === 2 ? 'grid-cols-2' : 'grid-cols-3'">
+        <button
+          v-for="r in allowedRatings"
+          :key="r"
+          class="flex flex-col items-center gap-1 rounded-lg py-3 text-white transition active:scale-95"
+          :class="{
+            'bg-red-600 hover:bg-red-500': r === 1,
+            'bg-orange-500 hover:bg-orange-400': r === 2,
+            'bg-emerald-600 hover:bg-emerald-500': r === 3,
+            'bg-sky-600 hover:bg-sky-500': r === 4,
+          }"
+          @click="rate(r)"
+        >
+          <span class="text-xs font-semibold uppercase tracking-wide">
+            <span v-if="r === 1">Encore</span>
+            <span v-else-if="r === 2">Difficile</span>
+            <span v-else-if="r === 3">Bien</span>
+            <span v-else>Facile</span>
+          </span>
+          <span class="text-xs opacity-80">{{ intervals[r] }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
