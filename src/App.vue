@@ -24,17 +24,18 @@ onMounted(async () => {
     </main>
 
     <nav
-      class="fixed inset-x-0 bottom-0 border-t border-slate-800 bg-slate-950/90 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+      class="fixed inset-x-0 bottom-0 border-t border-slate-800 bg-slate-950/90 backdrop-blur"
+      :style="{ paddingBottom: 'min(env(safe-area-inset-bottom), 12px)' }"
     >
       <div class="mx-auto flex max-w-md items-stretch justify-around">
         <RouterLink
           v-for="item in tabs"
           :key="item.to"
           :to="item.to"
-          class="flex flex-1 flex-col items-center gap-1 py-2 text-xs"
+          class="flex flex-1 flex-col items-center gap-1 py-1.5 text-xs"
           active-class="text-brand-500"
         >
-          <span class="text-xl">{{ item.icon }}</span>
+          <span class="text-lg">{{ item.icon }}</span>
           <span>{{ item.label }}</span>
         </RouterLink>
       </div>
