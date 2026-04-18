@@ -134,14 +134,22 @@ export const useDeckStore = defineStore('deck', () => {
   }
 
   async function submitReview(cardId: string, rating: ReviewRating) {
-    const card = cards.value.find((c) => c.id === cardId);
-    if (!card) return;
+    const idx = cards.value.findIndex((c) => c.id === cardId);
+    if (idx < 0) return;
+    const card = cards.value[idx];
     const wasNew = card.state === 0;
     const { card: updated, log } = reviewCard(card, rating);
-    Object.assign(card, updated);
+    cards.value.splice(idx, 1, { ...updated });
     await db.cards.put({ ...updated });
     await db.reviews.add({ cardId, ...log, wasNew });
-    if (wasNew) newSeenToday.value += 1;
+    if (wasNew) newSeenToday.value = newSeenToday.value + 1;
+    console.log('[submitReview]', {
+      wasNew,
+      rating,
+      newState: updated.state,
+      newSeenToday: newSeenToday.value,
+      newLeftToday: Math.max(0, newCardsPerDay.value - newSeenToday.value),
+    });
   }
 
   function cardById(id: string) {
