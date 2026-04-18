@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { useDeckStore } from '../stores/deck';
 import { HSK_LEVELS, useHskStore } from '../stores/hsk';
 import {
@@ -61,14 +61,27 @@ async function refresh() {
   sentencesGlobal.value = await getSentencesGlobalStats();
 }
 
+const route = useRoute();
+
 onMounted(async () => {
   if (!deck.loaded) await deck.loadAll();
   await hsk.ensureLoaded();
   await refresh();
 });
 
+onActivated(() => {
+  refresh();
+});
+
 watch(
-  () => [deck.cards.length, deck.newSeenToday],
+  () => route.fullPath,
+  (path) => {
+    if (path.includes('dashboard')) refresh();
+  }
+);
+
+watch(
+  () => [deck.cards.length, deck.newSeenToday, deck.dueReviewCards.length],
   () => {
     refresh();
   }
