@@ -125,9 +125,10 @@ export async function getOrCreateSentenceCard(
 ): Promise<SentenceCard> {
   const existing = await db.sentenceCards.get(zh);
   if (existing) return existing;
-  const card = buildNewSentenceCard(zh, fr, tokens);
-  await db.sentenceCards.put(card);
-  return card;
+  const card = buildNewSentenceCard(zh, fr, [...tokens]);
+  const plain: SentenceCard = JSON.parse(JSON.stringify(card));
+  await db.sentenceCards.put(plain);
+  return plain;
 }
 
 export async function submitSentenceReview(
