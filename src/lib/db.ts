@@ -47,6 +47,14 @@ export interface ReviewLog {
   wasNew: boolean;
 }
 
+export interface SentenceReview {
+  id?: number;
+  zh: string;
+  fr: string;
+  result: 'correct' | 'wrong' | 'skipped';
+  reviewedAt: number;
+}
+
 export interface Meta {
   key: string;
   value: string | number | boolean;
@@ -56,6 +64,7 @@ class ChineseDB extends Dexie {
   dict!: Table<DictEntry, number>;
   cards!: Table<Card, string>;
   reviews!: Table<ReviewLog, number>;
+  sentenceReviews!: Table<SentenceReview, number>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -81,6 +90,13 @@ class ChineseDB extends Dexie {
             if (!Array.isArray(card.tags)) card.tags = [];
           });
       });
+    this.version(3).stores({
+      dict: '++id, simplified, pinyinPlain',
+      cards: 'id, simplified, due, state, createdAt, *tags',
+      reviews: '++id, cardId, reviewedAt',
+      sentenceReviews: '++id, zh, reviewedAt',
+      meta: 'key',
+    });
   }
 }
 

@@ -1,4 +1,4 @@
-import { db, type Card, type ReviewLog } from './db';
+import { db, type Card, type ReviewLog, type SentenceReview } from './db';
 
 export function startOfDay(ts: number = Date.now()): number {
   const d = new Date(ts);
@@ -6,18 +6,17 @@ export function startOfDay(ts: number = Date.now()): number {
   return d.getTime();
 }
 
-export interface TodaySummary {
+export interface CardsTodaySummary {
   reviewsDone: number;
   correctRate: number;
   dueReviewsLeft: number;
   newLeft: number;
 }
 
-export async function getTodaySummary(
-  cards: Card[],
+export async function getCardsTodaySummary(
   dueReviewsLeft: number,
   newLeft: number
-): Promise<TodaySummary> {
+): Promise<CardsTodaySummary> {
   const since = startOfDay();
   const logs = await db.reviews.where('reviewedAt').aboveOrEqual(since).toArray();
   const total = logs.length;
@@ -29,6 +28,21 @@ export async function getTodaySummary(
     dueReviewsLeft,
     newLeft,
   };
+}
+
+export interface SentencesTodaySummary {
+  attempted: number;
+  successRate: number;
+  inQueue: number;
+}
+
+export async function getSentencesTodaySummary(inQueue: number): Promise<SentencesTodaySummary> {
+  const since = startOfDay();
+  const logs = await db.sentenceReviews.where('reviewedAt').aboveOrEqual(since).toArray();
+  const attempted = logs.filter((l) => l.result !== 'skipped').length;
+  const correct = logs.filter((l) => l.result === 'correct').length;
+  const rate = attempted > 0 ? Math.round((correct / attempted) * 100) : 0;
+  return { attempted, successRate: rate, inQueue };
 }
 
 export interface LevelProgress {
@@ -79,24 +93,77 @@ export function findLeeches(cards: Card[], limit = 10): LeechEntry[] {
   return candidates.slice(0, limit);
 }
 
+export interface SentenceLeech {
+  zh: string;
+  fr: string;
+  failures: number;
+  attempts: number;
+  lastReviewedAt: number;
+}
+
+export async function findSentenceLeeches(limit = 10): Promise<SentenceLeech[]> {
+  const all = await db.sentenceReviews.toArray();
+  const map = new Map<string, SentenceLeech>();
+  for (const r of all) {
+    if (r.result === 'skipped') continue;
+    const existing = map.get(r.zh);
+    if (existing) {
+      existing.attempts += 1;
+      if (r.result === 'wrong') existing.failures += 1;
+      if (r.reviewedAt > existing.lastReviewedAt) existing.lastReviewedAt = r.reviewedAt;
+    } else {
+      map.set(r.zh, {
+        zh: r.zh,
+        fr: r.fr,
+        failures: r.result === 'wrong' ? 1 : 0,
+        attempts: 1,
+        lastReviewedAt: r.reviewedAt,
+      });
+    }
+  }
+  return Array.from(map.values())
+    .filter((s) => s.failures >= 2)
+    .sort((a, b) => {
+      if (b.failures !== a.failures) return b.failures - a.failures;
+      return b.lastReviewedAt - a.lastReviewedAt;
+    })
+    .slice(0, limit);
+}
+
 export interface HeatmapDay {
   date: string;
   count: number;
+  cards: number;
+  sentences: number;
 }
 
 export async function buildHeatmap(days = 90): Promise<HeatmapDay[]> {
   const earliest = startOfDay() - (days - 1) * 86400000;
-  const logs = await db.reviews.where('reviewedAt').aboveOrEqual(earliest).toArray();
-  const counts = new Map<string, number>();
-  for (const l of logs) {
+  const cardLogs = await db.reviews.where('reviewedAt').aboveOrEqual(earliest).toArray();
+  const sentenceLogs = await db.sentenceReviews
+    .where('reviewedAt')
+    .aboveOrEqual(earliest)
+    .toArray();
+
+  const cardMap = new Map<string, number>();
+  for (const l of cardLogs) {
     const key = dateKey(startOfDay(l.reviewedAt));
-    counts.set(key, (counts.get(key) ?? 0) + 1);
+    cardMap.set(key, (cardMap.get(key) ?? 0) + 1);
   }
+  const sentenceMap = new Map<string, number>();
+  for (const l of sentenceLogs) {
+    if (l.result === 'skipped') continue;
+    const key = dateKey(startOfDay(l.reviewedAt));
+    sentenceMap.set(key, (sentenceMap.get(key) ?? 0) + 1);
+  }
+
   const out: HeatmapDay[] = [];
   for (let i = 0; i < days; i++) {
     const ts = earliest + i * 86400000;
     const key = dateKey(ts);
-    out.push({ date: key, count: counts.get(key) ?? 0 });
+    const cards = cardMap.get(key) ?? 0;
+    const sentences = sentenceMap.get(key) ?? 0;
+    out.push({ date: key, count: cards + sentences, cards, sentences });
   }
   return out;
 }
@@ -110,14 +177,14 @@ export function computeStreak(heatmap: HeatmapDay[]): number {
   return streak;
 }
 
-export interface GlobalStats {
+export interface CardsGlobalStats {
   totalCards: number;
   totalReviews: number;
   retention: number;
   addedThisWeek: number;
 }
 
-export async function getGlobalStats(cards: Card[]): Promise<GlobalStats> {
+export async function getCardsGlobalStats(cards: Card[]): Promise<CardsGlobalStats> {
   const totalReviews = await db.reviews.count();
   let correct = 0;
   let total = 0;
@@ -136,6 +203,28 @@ export async function getGlobalStats(cards: Card[]): Promise<GlobalStats> {
     retention,
     addedThisWeek,
   };
+}
+
+export interface SentencesGlobalStats {
+  uniqueSeen: number;
+  totalAttempts: number;
+  successRate: number;
+}
+
+export async function getSentencesGlobalStats(): Promise<SentencesGlobalStats> {
+  const all = await db.sentenceReviews.toArray();
+  const realAttempts = all.filter((l) => l.result !== 'skipped');
+  const correct = realAttempts.filter((l) => l.result === 'correct').length;
+  const unique = new Set(realAttempts.map((l) => l.zh));
+  return {
+    uniqueSeen: unique.size,
+    totalAttempts: realAttempts.length,
+    successRate: realAttempts.length > 0 ? Math.round((correct / realAttempts.length) * 100) : 0,
+  };
+}
+
+export async function logSentenceReview(entry: Omit<SentenceReview, 'id'>): Promise<void> {
+  await db.sentenceReviews.add(entry as SentenceReview);
 }
 
 function dateKey(ts: number): string {

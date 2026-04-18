@@ -5,19 +5,27 @@ import { useDeckStore } from '../stores/deck';
 import { previewIntervals, type ReviewRating } from '../lib/fsrs';
 import { buildQuizQuestion, scoreToRating, type QuizQuestion } from '../lib/quiz';
 import { loadSentences, pickSentence, type SentenceItem } from '../lib/sentences';
+import { logSentenceReview } from '../lib/stats';
 import Flashcard from '../components/Flashcard.vue';
 import ReviewButtons from '../components/ReviewButtons.vue';
 import QuizCard from '../components/QuizCard.vue';
 import SentenceBuilder from '../components/SentenceBuilder.vue';
 
-type Mode = 'classic' | 'quiz' | 'sentences';
+type Mode = 'quiz' | 'sentences';
 const MODE_KEY = 'chinese-pwa:reviewMode';
+
+function readMode(): Mode {
+  const stored = localStorage.getItem(MODE_KEY);
+  if (stored === 'quiz' || stored === 'sentences') return stored;
+  return 'quiz';
+}
 
 const deck = useDeckStore();
 const flashcard = ref<InstanceType<typeof Flashcard> | null>(null);
-const mode = ref<Mode>((localStorage.getItem(MODE_KEY) as Mode) || 'classic');
+const mode = ref<Mode>(readMode());
 const quizQuestion = ref<QuizQuestion | null>(null);
 const quizRating = ref<ReviewRating | null>(null);
+const showFullCard = ref(false);
 const sentencePool = ref<SentenceItem[] | null>(null);
 const SENTENCE_QUEUE_KEY = 'chinese-pwa:sentenceQueue';
 const sentenceQueue = ref<SentenceItem[]>(loadSentenceQueue());
@@ -102,10 +110,12 @@ const current = computed(() => deck.dueCards[0] ?? null);
 const intervals = computed(() => (current.value ? previewIntervals(current.value) : null));
 
 const canQuiz = computed(() => deck.cards.length >= 4);
+const useClassicFallback = computed(() => mode.value === 'quiz' && !canQuiz.value);
 
 watch(
   [current, mode],
   ([card, m]) => {
+    showFullCard.value = false;
     if (m === 'quiz' && card && canQuiz.value) {
       quizQuestion.value = buildQuizQuestion(card, deck.cards);
       quizRating.value = null;
@@ -129,6 +139,37 @@ async function nextQuizCard() {
   if (!current.value || !quizRating.value) return;
   await deck.submitReview(current.value.id, quizRating.value);
   quizRating.value = null;
+  showFullCard.value = false;
+}
+
+function requeueAndNextWithLog(failed: SentenceItem) {
+  logSentenceReview({
+    zh: failed.zh,
+    fr: failed.fr,
+    result: 'wrong',
+    reviewedAt: Date.now(),
+  });
+  requeueAndNext(failed);
+}
+
+function nextSentenceWithLog(success: boolean, currentZh?: string, currentFr?: string) {
+  if (currentZh && currentFr) {
+    logSentenceReview({
+      zh: currentZh,
+      fr: currentFr,
+      result: success ? 'correct' : 'skipped',
+      reviewedAt: Date.now(),
+    });
+  }
+  nextSentence();
+}
+
+function onSentenceCorrect(s: SentenceItem) {
+  nextSentenceWithLog(true, s.zh, s.fr);
+}
+
+function onSentenceSkip(s: SentenceItem) {
+  nextSentenceWithLog(false, s.zh, s.fr);
 }
 </script>
 
@@ -147,16 +188,7 @@ async function nextQuizCard() {
     <div class="flex gap-2">
       <button
         class="btn flex-1 text-sm"
-        :class="mode === 'classic' ? 'bg-brand-500 text-white' : 'btn-ghost'"
-        @click="mode = 'classic'"
-      >
-        🎯 Classique
-      </button>
-      <button
-        class="btn flex-1 text-sm"
         :class="mode === 'quiz' ? 'bg-brand-500 text-white' : 'btn-ghost'"
-        :disabled="!canQuiz"
-        :title="!canQuiz ? 'Il faut au moins 4 cartes dans le deck' : undefined"
         @click="mode = 'quiz'"
       >
         🧠 Quiz
@@ -170,7 +202,11 @@ async function nextQuizCard() {
       </button>
     </div>
 
-    <template v-if="current && mode === 'classic' && intervals">
+    <p v-if="useClassicFallback && current" class="rounded-md bg-amber-900/30 p-2 text-center text-xs text-amber-200">
+      Quiz indisponible (deck &lt; 4 cartes) — mode classique utilisé.
+    </p>
+
+    <template v-if="current && useClassicFallback && intervals">
       <Flashcard ref="flashcard" :card="current" />
       <div>
         <ReviewButtons
@@ -186,34 +222,37 @@ async function nextQuizCard() {
 
     <template v-else-if="current && mode === 'quiz' && quizQuestion">
       <QuizCard :question="quizQuestion" @done="onQuizDone" />
-      <button
-        v-if="quizRating"
-        class="btn-primary"
-        @click="nextQuizCard"
-      >
-        Suivant →
-      </button>
+      <div v-if="quizRating" class="flex flex-col gap-2">
+        <button
+          v-if="!showFullCard && current.sentences.length"
+          class="btn-ghost text-sm"
+          @click="showFullCard = true"
+        >
+          👁 Voir la carte complète
+        </button>
+        <div v-if="showFullCard" class="card text-left">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Exemples</p>
+          <div
+            v-for="s in current.sentences"
+            :key="s.id"
+            class="mt-2 rounded bg-slate-800/60 p-2 text-sm"
+          >
+            <p class="hanzi">{{ s.zh }}</p>
+            <p v-if="s.fr" class="text-slate-300">{{ s.fr }}</p>
+            <p v-if="s.source" class="text-xs text-slate-500">— {{ s.source }}</p>
+          </div>
+        </div>
+        <button class="btn-primary" @click="nextQuizCard">Suivant →</button>
+      </div>
     </template>
-
-    <div
-      v-else-if="current && mode === 'quiz' && !canQuiz"
-      class="flex flex-1 flex-col items-center justify-center text-center"
-    >
-      <p class="text-4xl">🧩</p>
-      <p class="mt-4 text-lg font-semibold">Pas assez de cartes pour le quiz</p>
-      <p class="mt-1 text-sm text-slate-400">
-        Le mode quiz a besoin d'au moins 4 cartes dans ton deck pour créer des choix.
-      </p>
-      <RouterLink to="/decks" class="btn-primary mt-6">Importer un deck HSK</RouterLink>
-    </div>
 
     <template v-else-if="mode === 'sentences'">
       <SentenceBuilder
         v-if="currentSentence"
         :sentence="currentSentence"
-        @next="nextSentence"
-        @failed="requeueAndNext"
-        @skip="nextSentence"
+        @next="onSentenceCorrect"
+        @failed="requeueAndNextWithLog"
+        @skip="onSentenceSkip"
       />
       <div v-else class="flex flex-1 items-center justify-center text-slate-500">
         {{ sentencesLoading ? 'Chargement des phrases…' : 'Aucune phrase disponible' }}

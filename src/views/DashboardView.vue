@@ -8,36 +8,57 @@ import {
   computeLevelProgress,
   computeStreak,
   findLeeches,
-  getGlobalStats,
-  getTodaySummary,
+  findSentenceLeeches,
+  getCardsGlobalStats,
+  getCardsTodaySummary,
+  getSentencesGlobalStats,
+  getSentencesTodaySummary,
+  type CardsGlobalStats,
+  type CardsTodaySummary,
   type HeatmapDay,
-  type GlobalStats,
   type LeechEntry,
   type LevelProgress,
-  type TodaySummary,
+  type SentenceLeech,
+  type SentencesGlobalStats,
+  type SentencesTodaySummary,
 } from '../lib/stats';
+
+const SENTENCE_QUEUE_KEY = 'chinese-pwa:sentenceQueue';
 
 const deck = useDeckStore();
 const hsk = useHskStore();
 
-const today = ref<TodaySummary | null>(null);
+const cardsToday = ref<CardsTodaySummary | null>(null);
+const sentencesToday = ref<SentencesTodaySummary | null>(null);
+const cardsGlobal = ref<CardsGlobalStats | null>(null);
+const sentencesGlobal = ref<SentencesGlobalStats | null>(null);
 const levels = ref<LevelProgress[]>([]);
 const leeches = ref<LeechEntry[]>([]);
+const sentenceLeeches = ref<SentenceLeech[]>([]);
 const heatmap = ref<HeatmapDay[]>([]);
-const global = ref<GlobalStats | null>(null);
 const streak = computed(() => computeStreak(heatmap.value));
 
+function readSentenceQueueLength(): number {
+  try {
+    const raw = localStorage.getItem(SENTENCE_QUEUE_KEY);
+    if (!raw) return 0;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
 async function refresh() {
-  today.value = await getTodaySummary(
-    deck.cards,
-    deck.dueReviewCards.length,
-    deck.newLeftToday
-  );
+  cardsToday.value = await getCardsTodaySummary(deck.dueReviewCards.length, deck.newLeftToday);
+  sentencesToday.value = await getSentencesTodaySummary(readSentenceQueueLength());
   const levelInput = HSK_LEVELS.map((lvl) => ({ id: lvl.id, total: hsk.words(lvl.id).length }));
   levels.value = computeLevelProgress(deck.cards, levelInput);
   leeches.value = findLeeches(deck.cards, 10);
+  sentenceLeeches.value = await findSentenceLeeches(10);
   heatmap.value = await buildHeatmap(90);
-  global.value = await getGlobalStats(deck.cards);
+  cardsGlobal.value = await getCardsGlobalStats(deck.cards);
+  sentencesGlobal.value = await getSentencesGlobalStats();
 }
 
 onMounted(async () => {
@@ -73,10 +94,6 @@ function levelLabel(id: string): string {
   return HSK_LEVELS.find((l) => l.id === id)?.label ?? id;
 }
 
-function levelColor(id: string): string {
-  return HSK_LEVELS.find((l) => l.id === id)?.color ?? 'bg-slate-500';
-}
-
 function barPct(part: number, total: number): number {
   return total > 0 ? (part / total) * 100 : 0;
 }
@@ -95,29 +112,49 @@ function leechReason(r: LeechEntry): string {
       <p class="mt-1 text-sm text-slate-400">Ton progrès en un coup d'œil.</p>
     </header>
 
-    <article v-if="today" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Aujourd'hui</h2>
+    <article v-if="cardsToday" class="card border-l-4 border-sky-500">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-sky-400">📚 Mots — Aujourd'hui</h2>
       <div class="mt-3 grid grid-cols-2 gap-3">
         <div>
-          <p class="text-3xl font-bold text-sky-400">{{ today.dueReviewsLeft }}</p>
+          <p class="text-3xl font-bold text-sky-400">{{ cardsToday.dueReviewsLeft }}</p>
           <p class="text-xs text-slate-400">à revoir</p>
         </div>
         <div>
-          <p class="text-3xl font-bold text-emerald-400">{{ today.newLeft }}</p>
+          <p class="text-3xl font-bold text-emerald-400">{{ cardsToday.newLeft }}</p>
           <p class="text-xs text-slate-400">nouveaux ({{ deck.newCardsPerDay }}/jour)</p>
         </div>
       </div>
-      <div v-if="today.reviewsDone > 0" class="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-300">
-        {{ today.reviewsDone }} cartes faites · <span class="text-emerald-400">{{ today.correctRate }}% juste</span>
+      <div v-if="cardsToday.reviewsDone > 0" class="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-300">
+        {{ cardsToday.reviewsDone }} cartes revues · <span class="text-emerald-400">{{ cardsToday.correctRate }}% juste</span>
       </div>
       <RouterLink
-        v-if="today.dueReviewsLeft + today.newLeft > 0"
+        v-if="cardsToday.dueReviewsLeft + cardsToday.newLeft > 0"
         to="/review"
         class="btn-primary mt-4 w-full"
       >
         Continuer la révision →
       </RouterLink>
       <p v-else class="mt-4 text-center text-xs text-slate-500">🎉 Rien à faire pour aujourd'hui.</p>
+    </article>
+
+    <article v-if="sentencesToday" class="card border-l-4 border-purple-500">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-purple-400">🧩 Phrases — Aujourd'hui</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-3xl font-bold text-purple-400">{{ sentencesToday.attempted }}</p>
+          <p class="text-xs text-slate-400">tentées</p>
+        </div>
+        <div>
+          <p class="text-3xl font-bold text-emerald-400">{{ sentencesToday.successRate }}%</p>
+          <p class="text-xs text-slate-400">réussies</p>
+        </div>
+      </div>
+      <div v-if="sentencesToday.inQueue > 0" class="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-300">
+        {{ sentencesToday.inQueue }} phrase(s) à revoir dans la queue
+      </div>
+      <RouterLink to="/review" class="btn-ghost mt-4 w-full">
+        Pratiquer les phrases →
+      </RouterLink>
     </article>
 
     <article class="card">
@@ -145,7 +182,7 @@ function leechReason(r: LeechEntry): string {
     </article>
 
     <article v-if="leeches.length" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">À retravailler 🔴</h2>
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">📚 Mots à retravailler 🔴</h2>
       <ul class="mt-3 space-y-2">
         <li v-for="l in leeches" :key="l.card.id">
           <RouterLink
@@ -165,6 +202,23 @@ function leechReason(r: LeechEntry): string {
       </ul>
     </article>
 
+    <article v-if="sentenceLeeches.length" class="card">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">🧩 Phrases difficiles 🔴</h2>
+      <ul class="mt-3 space-y-2">
+        <li
+          v-for="s in sentenceLeeches"
+          :key="s.zh"
+          class="rounded-lg bg-slate-800/60 p-2"
+        >
+          <p class="hanzi text-lg">{{ s.zh }}</p>
+          <p class="text-xs text-slate-300">{{ s.fr }}</p>
+          <p class="mt-1 text-xs text-red-300">
+            {{ s.failures }} échec(s) sur {{ s.attempts }} tentative(s)
+          </p>
+        </li>
+      </ul>
+    </article>
+
     <article v-if="heatmap.length" class="card">
       <div class="flex items-baseline justify-between">
         <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">90 derniers jours</h2>
@@ -177,30 +231,49 @@ function leechReason(r: LeechEntry): string {
             :key="di"
             class="h-3 w-3 rounded-sm"
             :class="heatColor(day.count)"
-            :title="`${day.date} · ${day.count} cartes`"
+            :title="`${day.date} · ${day.cards} mot(s) · ${day.sentences} phrase(s)`"
           />
+        </div>
+      </div>
+      <p class="mt-2 text-xs text-slate-500">Mots et phrases combinés</p>
+    </article>
+
+    <article v-if="cardsGlobal" class="card border-l-4 border-sky-500">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-sky-400">📚 Mots — Total</h2>
+      <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p class="text-2xl font-bold">{{ cardsGlobal.totalCards }}</p>
+          <p class="text-xs text-slate-400">cartes</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold">{{ cardsGlobal.totalReviews }}</p>
+          <p class="text-xs text-slate-400">révisions</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-emerald-400">{{ cardsGlobal.retention }}%</p>
+          <p class="text-xs text-slate-400">rétention</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold">+{{ cardsGlobal.addedThisWeek }}</p>
+          <p class="text-xs text-slate-400">cette semaine</p>
         </div>
       </div>
     </article>
 
-    <article v-if="global" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Chiffres</h2>
+    <article v-if="sentencesGlobal" class="card border-l-4 border-purple-500">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-purple-400">🧩 Phrases — Total</h2>
       <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
         <div>
-          <p class="text-2xl font-bold">{{ global.totalCards }}</p>
-          <p class="text-xs text-slate-400">cartes au total</p>
+          <p class="text-2xl font-bold">{{ sentencesGlobal.uniqueSeen }}</p>
+          <p class="text-xs text-slate-400">phrases uniques vues</p>
         </div>
         <div>
-          <p class="text-2xl font-bold">{{ global.totalReviews }}</p>
-          <p class="text-xs text-slate-400">révisions faites</p>
+          <p class="text-2xl font-bold">{{ sentencesGlobal.totalAttempts }}</p>
+          <p class="text-xs text-slate-400">tentatives totales</p>
         </div>
         <div>
-          <p class="text-2xl font-bold text-emerald-400">{{ global.retention }}%</p>
-          <p class="text-xs text-slate-400">rétention globale</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold">+{{ global.addedThisWeek }}</p>
-          <p class="text-xs text-slate-400">cette semaine</p>
+          <p class="text-2xl font-bold text-emerald-400">{{ sentencesGlobal.successRate }}%</p>
+          <p class="text-xs text-slate-400">de réussite</p>
         </div>
       </div>
     </article>

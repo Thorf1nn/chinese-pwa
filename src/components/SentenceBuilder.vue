@@ -4,7 +4,7 @@ import type { SentenceItem } from '../lib/sentences';
 import { shuffleTokens } from '../lib/sentences';
 
 const props = defineProps<{ sentence: SentenceItem }>();
-const emit = defineEmits<{ next: []; failed: [SentenceItem]; skip: [] }>();
+const emit = defineEmits<{ next: [SentenceItem]; failed: [SentenceItem]; skip: [SentenceItem] }>();
 
 interface Token {
   uid: string;
@@ -111,7 +111,7 @@ function check() {
     </div>
 
     <div class="flex gap-2">
-      <button v-if="result === 'pending'" class="btn-ghost flex-1" @click="emit('skip')">Passer</button>
+      <button v-if="result === 'pending'" class="btn-ghost flex-1" @click="emit('skip', sentence)">Passer</button>
       <button
         v-if="result === 'pending'"
         class="btn-primary flex-1"
@@ -123,7 +123,7 @@ function check() {
       <button v-else-if="result === 'wrong'" class="btn-primary flex-1" @click="emit('failed', sentence)">
         Suivant →
       </button>
-      <button v-else class="btn-primary flex-1" @click="emit('next')">Suivant →</button>
+      <button v-else class="btn-primary flex-1" @click="emit('next', sentence)">Suivant →</button>
     </div>
   </div>
 </template>
