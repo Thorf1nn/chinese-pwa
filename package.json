@@ -1,0 +1,37 @@
+{
+  "name": "chinese-pwa",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "build:cedict": "tsx scripts/build-cedict.ts",
+    "build:hsk": "tsx scripts/build-hsk.ts",
+    "build:sentences": "tsx scripts/build-sentences.ts",
+    "build:data": "npm run build:cedict && npm run build:hsk && npm run build:sentences"
+  },
+  "dependencies": {
+    "dexie": "^4.0.10",
+    "pinia": "^2.2.6",
+    "pinyin-pro": "^3.25.0",
+    "ts-fsrs": "^4.4.4",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@node-rs/jieba": "^2.0.1",
+    "@types/node": "^22.10.1",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "tsx": "^4.19.2",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.3",
+    "vite-plugin-pwa": "^0.21.1",
+    "vue-tsc": "^2.1.10",
+    "workbox-window": "^7.3.0"
+  }
+}
