@@ -204,6 +204,19 @@ function onSentenceSkip() {
       Quiz indisponible (deck &lt; 4 cartes) — mode classique utilisé.
     </p>
 
+    <details class="rounded-md bg-slate-900 p-2 text-xs text-slate-400">
+      <summary class="cursor-pointer select-none">🔬 Debug état</summary>
+      <pre class="mt-2 overflow-x-auto whitespace-pre-wrap">
+Total cartes: {{ deck.totalCount }}
+Nouvelles (state 0): {{ deck.newCount }}
+Dues (review): {{ deck.dueReviewCards.length }}
+Nouvelles disponibles maintenant: {{ deck.availableNewCards.length }}
+Nouvelles autorisées aujourd'hui: {{ deck.newLeftToday }} / {{ deck.newCardsPerDay }}
+Nouvelles déjà vues aujourd'hui: {{ deck.newSeenToday }}
+Queue finale (dueCards): {{ deck.dueCards.length }}
+Carte actuelle: {{ current ? current.simplified + ' (state=' + current.state + ', due=' + new Date(current.due).toLocaleTimeString() + ')' : 'aucune' }}</pre>
+    </details>
+
     <template v-if="current && useClassicFallback && intervals">
       <Flashcard ref="flashcard" :card="current" />
       <div>
