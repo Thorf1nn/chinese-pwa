@@ -139,7 +139,8 @@ export async function submitSentenceReview(
   const card = await getOrCreateSentenceCard(zh, fr, tokens);
   const wasNew = card.state === 0;
   const { card: updated, log } = reviewSentenceCard(card, rating);
-  await db.sentenceCards.put(updated);
+  const plain: SentenceCard = JSON.parse(JSON.stringify(updated));
+  await db.sentenceCards.put(plain);
   await db.sentenceLogs.add({ zh, ...log, wasNew });
-  return updated;
+  return plain;
 }

@@ -139,14 +139,15 @@ export const useDeckStore = defineStore('deck', () => {
     const card = cards.value[idx];
     const wasNew = card.state === 0;
     const { card: updated, log } = reviewCard(card, rating);
-    cards.value.splice(idx, 1, { ...updated });
-    await db.cards.put({ ...updated });
+    const plainCard: Card = JSON.parse(JSON.stringify(updated));
+    await db.cards.put(plainCard);
     await db.reviews.add({ cardId, ...log, wasNew });
+    cards.value.splice(idx, 1, plainCard);
     if (wasNew) newSeenToday.value = newSeenToday.value + 1;
     console.log('[submitReview]', {
       wasNew,
       rating,
-      newState: updated.state,
+      newState: plainCard.state,
       newSeenToday: newSeenToday.value,
       newLeftToday: Math.max(0, newCardsPerDay.value - newSeenToday.value),
     });
