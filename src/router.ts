@@ -7,6 +7,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/review', name: 'review', component: () => import('./views/ReviewView.vue') },
   { path: '/deck', name: 'deck', component: () => import('./views/DeckView.vue') },
   { path: '/decks', name: 'decks', component: () => import('./views/DecksView.vue') },
+  { path: '/settings', name: 'settings', component: () => import('./views/SettingsView.vue') },
   { path: '/card/:id', name: 'card', component: () => import('./views/CardView.vue'), props: true },
 ];
 

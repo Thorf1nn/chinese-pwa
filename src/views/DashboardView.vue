@@ -120,9 +120,18 @@ function leechReason(r: LeechEntry): string {
 
 <template>
   <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header>
-      <h1 class="text-2xl font-bold">Dashboard</h1>
-      <p class="mt-1 text-sm text-slate-400">Ton progrès en un coup d'œil.</p>
+    <header class="flex items-start justify-between">
+      <div>
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+        <p class="mt-1 text-sm text-slate-400">Ton progrès en un coup d'œil.</p>
+      </div>
+      <RouterLink
+        to="/settings"
+        class="rounded-lg p-2 text-xl hover:bg-slate-800"
+        title="Réglages"
+      >
+        ⚙️
+      </RouterLink>
     </header>
 
     <article v-if="cardsToday" class="card border-l-4 border-sky-500">
