@@ -47,6 +47,7 @@ onMounted(async () => {
 const tabs = [
   { to: '/dashboard', label: 'Dashboard', icon: '📊' },
   { to: '/review', label: 'Réviser', icon: '🎯' },
+  { to: '/scan', label: 'Scan', icon: '📷' },
   { to: '/search', label: 'Chercher', icon: '🔍' },
   { to: '/decks', label: 'HSK', icon: '🎓' },
 ] as const;
