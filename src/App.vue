@@ -15,7 +15,7 @@ onMounted(async () => {
   <div class="flex h-full flex-col">
     <DictLoader v-if="dict.status !== 'ready'" />
 
-    <main class="flex-1 overflow-y-auto pb-20 pt-[env(safe-area-inset-top)]">
+    <main class="flex-1 overflow-y-auto pb-24 pt-[env(safe-area-inset-top)]">
       <RouterView v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -23,19 +23,16 @@ onMounted(async () => {
       </RouterView>
     </main>
 
-    <nav
-      class="fixed inset-x-0 bottom-0 border-t border-slate-800 bg-slate-950/90 backdrop-blur"
-      :style="{ paddingBottom: 'min(env(safe-area-inset-bottom), 12px)' }"
-    >
+    <nav class="nav-bottom fixed inset-x-0 bottom-0 border-t border-slate-800 bg-slate-950/95 backdrop-blur">
       <div class="mx-auto flex max-w-md items-stretch justify-around">
         <RouterLink
           v-for="item in tabs"
           :key="item.to"
           :to="item.to"
-          class="flex flex-1 flex-col items-center gap-1 py-1.5 text-xs"
+          class="flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px]"
           active-class="text-brand-500"
         >
-          <span class="text-lg">{{ item.icon }}</span>
+          <span class="text-lg leading-none">{{ item.icon }}</span>
           <span>{{ item.label }}</span>
         </RouterLink>
       </div>
@@ -62,5 +59,15 @@ export default { name: 'App' };
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.nav-bottom {
+  padding-bottom: 0;
+}
+
+@media (display-mode: standalone) {
+  .nav-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 </style>
