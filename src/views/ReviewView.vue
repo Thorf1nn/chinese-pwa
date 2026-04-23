@@ -108,20 +108,28 @@ function requeueAndNext(failed: SentenceItem) {
   currentSentence.value = next;
 }
 
-const current = computed(() => deck.dueCards[0] ?? null);
+const lockedCardId = ref<string | null>(null);
+const current = computed(() => {
+  if (lockedCardId.value) {
+    const locked = deck.cards.find((c) => c.id === lockedCardId.value);
+    if (locked) return locked;
+  }
+  return deck.dueCards[0] ?? null;
+});
 const intervals = computed(() => (current.value ? previewIntervals(current.value) : null));
 
 const canQuiz = computed(() => deck.cards.length >= 4);
 const useClassicFallback = computed(() => mode.value === 'quiz' && !canQuiz.value);
 
 watch(
-  [current, mode],
-  ([card, m]) => {
+  () => current.value?.id,
+  (id) => {
     showFullCard.value = false;
     quizDone.value = false;
     quizCorrectCount.value = 0;
-    if (m === 'quiz' && card && canQuiz.value) {
-      quizQuestion.value = buildQuizQuestion(card, deck.cards);
+    lockedCardId.value = id ?? null;
+    if (mode.value === 'quiz' && current.value && canQuiz.value) {
+      quizQuestion.value = buildQuizQuestion(current.value, deck.cards);
     } else {
       quizQuestion.value = null;
     }
@@ -129,9 +137,15 @@ watch(
   { immediate: true }
 );
 
+watch(mode, (m) => {
+  if (m !== 'quiz') lockedCardId.value = null;
+});
+
 async function rate(r: ReviewRating) {
   if (!current.value) return;
-  await deck.submitReview(current.value.id, r);
+  const id = current.value.id;
+  await deck.submitReview(id, r);
+  lockedCardId.value = null;
 }
 
 function onQuizDone(correct: 0 | 1 | 2) {
@@ -141,7 +155,9 @@ function onQuizDone(correct: 0 | 1 | 2) {
 
 async function rateFromQuiz(r: ReviewRating) {
   if (!current.value) return;
-  await deck.submitReview(current.value.id, r);
+  const id = current.value.id;
+  await deck.submitReview(id, r);
+  lockedCardId.value = null;
   quizDone.value = false;
   showFullCard.value = false;
 }
