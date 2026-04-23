@@ -82,6 +82,16 @@ export interface SentenceLog {
   wasNew: boolean;
 }
 
+export interface UserText {
+  id: string;
+  title: string;
+  subtitle?: string;
+  content: string;
+  hskLevel?: number;
+  createdAt: number;
+  lastReadAt?: number;
+}
+
 export interface Meta {
   key: string;
   value: string | number | boolean;
@@ -94,6 +104,7 @@ class ChineseDB extends Dexie {
   sentenceReviews!: Table<SentenceReview, number>;
   sentenceCards!: Table<SentenceCard, string>;
   sentenceLogs!: Table<SentenceLog, number>;
+  userTexts!: Table<UserText, string>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -133,6 +144,16 @@ class ChineseDB extends Dexie {
       sentenceReviews: '++id, zh, reviewedAt',
       sentenceCards: 'zh, due, state, createdAt',
       sentenceLogs: '++id, zh, reviewedAt',
+      meta: 'key',
+    });
+    this.version(5).stores({
+      dict: '++id, simplified, pinyinPlain',
+      cards: 'id, simplified, due, state, createdAt, *tags',
+      reviews: '++id, cardId, reviewedAt',
+      sentenceReviews: '++id, zh, reviewedAt',
+      sentenceCards: 'zh, due, state, createdAt',
+      sentenceLogs: '++id, zh, reviewedAt',
+      userTexts: 'id, createdAt, lastReadAt',
       meta: 'key',
     });
   }

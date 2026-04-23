@@ -9,6 +9,14 @@ const routes: RouteRecordRaw[] = [
   { path: '/decks', name: 'decks', component: () => import('./views/DecksView.vue') },
   { path: '/settings', name: 'settings', component: () => import('./views/SettingsView.vue') },
   { path: '/scan', name: 'scan', component: () => import('./views/ScanView.vue') },
+  { path: '/read', name: 'read', component: () => import('./views/ReadListView.vue') },
+  { path: '/read/new', name: 'read-new', component: () => import('./views/NewTextView.vue') },
+  {
+    path: '/read/:id',
+    name: 'read-text',
+    component: () => import('./views/ReadView.vue'),
+    props: true,
+  },
   { path: '/card/:id', name: 'card', component: () => import('./views/CardView.vue'), props: true },
 ];
 

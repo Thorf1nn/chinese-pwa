@@ -1,0 +1,37 @@
+{
+  "version": "2026-04-23",
+  "texts": [
+    {
+      "id": "preload-hsk1-hello",
+      "title": "我的家人",
+      "subtitle": "Ma famille — HSK 1",
+      "hskLevel": 1,
+      "content": "我是小明。我有一个家。我的家有四个人。爸爸、妈妈、哥哥和我。爸爸是老师。妈妈是医生。哥哥是学生。我也是学生。我们都爱我们的家。我爱爸爸,我爱妈妈,我爱哥哥。我们是一个好家。",
+      "description": "Une présentation simple de famille. Vocabulaire HSK 1 uniquement."
+    },
+    {
+      "id": "preload-hsk2-weekend",
+      "title": "我的周末",
+      "subtitle": "Mon week-end — HSK 2",
+      "hskLevel": 2,
+      "content": "昨天是星期六。早上我睡觉睡得很晚。起床以后我去了咖啡店。我喝了一杯咖啡,也吃了一个面包。下午我和朋友一起去看电影。那个电影很好看,我们都很喜欢。晚上我回家吃饭。妈妈做了鱼,我觉得很好吃。今天是星期天,我想在家休息,看书或者听音乐。这个周末很快乐。",
+      "description": "Un week-end typique. Introduit le passé (了), les activités courantes."
+    },
+    {
+      "id": "preload-hsk3-learning",
+      "title": "学中文",
+      "subtitle": "Apprendre le chinois — HSK 3",
+      "hskLevel": 3,
+      "content": "我学中文已经两年了。刚开始的时候,我觉得中文很难。汉字特别多,而且每个字都不一样。有的时候我记不住,觉得自己进步得很慢。可是我的老师告诉我,学一门语言需要时间和耐心。她说只要每天学一点,慢慢地就会好起来。所以我每天都听中文歌,看中文电影。现在我可以看懂一些简单的文章了,也能和中国朋友聊天。虽然还有很多不认识的字,但是我觉得中文越学越有意思。我希望有一天能去中国旅游,用中文和当地人说话。",
+      "description": "Réflexion sur l'apprentissage du chinois. Structures HSK 3 : 已经...了, 越...越, 虽然...但是."
+    },
+    {
+      "id": "preload-hsk3-music",
+      "title": "我喜欢的音乐",
+      "subtitle": "La musique que j'aime — HSK 3",
+      "hskLevel": 3,
+      "content": "我非常喜欢听音乐。每天早上起床后,我都会放一首歌。音乐让我觉得一天开始得很好。我喜欢的音乐有很多种。有的时候我听中文歌,因为我想学更多的词。听歌可以帮助我记住一些短语。有的时候我听英文歌或者法文歌,因为那是我的母语。我最喜欢的中国歌手是一个台湾的乐队。他们的歌词很有意思,也不是太难。我觉得通过听音乐学习语言是一个很好的方法,因为这样学习不会觉得累。",
+      "description": "Goûts musicaux et apprentissage par les chansons. Usage de 通过, 因为...所以, 让."
+    }
+  ]
+}
