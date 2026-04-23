@@ -12,10 +12,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-col">
+  <div class="flex min-h-[100dvh] flex-col">
     <DictLoader v-if="dict.status !== 'ready'" />
 
-    <main class="flex-1 overflow-y-auto pb-24 pt-[env(safe-area-inset-top)]">
+    <main
+      class="flex-1 overflow-y-auto pt-[env(safe-area-inset-top)]"
+      style="padding-bottom: calc(5rem + env(safe-area-inset-bottom))"
+    >
       <RouterView v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
@@ -62,12 +65,6 @@ export default { name: 'App' };
 }
 
 .nav-bottom {
-  padding-bottom: 0;
-}
-
-@media (display-mode: standalone) {
-  .nav-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
+  padding-bottom: env(safe-area-inset-bottom);
 }
 </style>
