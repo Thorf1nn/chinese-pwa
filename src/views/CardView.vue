@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { useDeckStore } from '../stores/deck';
+import { Badge, Button, Input, PageHeader, Separator, Textarea } from '../components/ui';
 
 const route = useRoute();
 const router = useRouter();
@@ -44,72 +45,73 @@ async function deleteCard() {
 </script>
 
 <template>
-  <section v-if="card" class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <RouterLink to="/deck" class="text-sm text-slate-400">← Retour au deck</RouterLink>
+  <section v-if="card" class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
+    <PageHeader eyebrow="Fiche" :title="card.simplified">
+      <template #action>
+        <RouterLink to="/deck">
+          <Button variant="ghost" size="sm">retour</Button>
+        </RouterLink>
+      </template>
+    </PageHeader>
 
-    <header class="card text-center">
-      <p class="hanzi text-6xl font-semibold">{{ card.simplified }}</p>
-      <p class="mt-2 text-xl text-brand-500">{{ card.pinyin }}</p>
-      <ul class="mt-3 space-y-1 text-sm text-slate-200">
-        <li v-for="(d, i) in card.definitions" :key="i">· {{ d }}</li>
+    <section class="space-y-3">
+      <div class="flex items-baseline gap-3">
+        <span class="hanzi text-5xl font-semibold">{{ card.simplified }}</span>
+        <span class="font-editorial text-xl text-primary">{{ card.pinyin }}</span>
+      </div>
+      <ul class="space-y-0.5 text-base">
+        <li v-for="(d, i) in card.definitions" :key="i">— {{ d }}</li>
       </ul>
-    </header>
+      <div v-if="card.tags.length" class="flex flex-wrap gap-1.5 pt-1">
+        <Badge v-for="t in card.tags" :key="t" variant="outline">{{ t }}</Badge>
+      </div>
+    </section>
 
-    <div class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Phrases d'exemple</h2>
+    <Separator />
 
-      <div v-if="card.sentences.length" class="mt-3 space-y-2">
+    <section class="space-y-4">
+      <h2 class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Phrases d'exemple</h2>
+
+      <div v-if="card.sentences.length" class="space-y-4">
         <div
           v-for="s in card.sentences"
           :key="s.id"
-          class="group relative rounded-lg bg-slate-800/60 p-3"
+          class="group relative border-l-2 border-border pl-4 pr-8"
         >
           <button
-            class="absolute right-2 top-2 text-xs text-slate-500 opacity-0 transition group-hover:opacity-100"
+            class="absolute right-0 top-0 text-xs text-muted-foreground opacity-0 transition group-hover:opacity-100"
             @click="deck.removeSentence(card!.id, s.id)"
           >
             ✕
           </button>
           <p class="hanzi text-lg">{{ s.zh }}</p>
-          <p v-if="s.fr" class="mt-1 text-sm text-slate-300">{{ s.fr }}</p>
-          <p v-if="s.source" class="mt-1 text-xs text-slate-500">— {{ s.source }}</p>
+          <p v-if="s.fr" class="mt-1 text-sm text-muted-foreground">{{ s.fr }}</p>
+          <p v-if="s.source" class="mt-0.5 text-[11px] uppercase tracking-wide text-muted-foreground/70">
+            — {{ s.source }}
+          </p>
         </div>
       </div>
-      <p v-else class="mt-2 text-sm text-slate-500">Aucune phrase pour l'instant.</p>
+      <p v-else class="text-sm italic text-muted-foreground">Aucune phrase pour l'instant.</p>
 
-      <form class="mt-4 space-y-2" @submit.prevent="addSentence">
-        <textarea
-          v-model="zh"
-          required
-          rows="2"
-          placeholder="Phrase en chinois"
-          class="hanzi w-full rounded-lg bg-slate-800 px-3 py-2 text-base ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
-        />
-        <input
-          v-model="fr"
-          type="text"
-          placeholder="Traduction (optionnel)"
-          class="w-full rounded-lg bg-slate-800 px-3 py-2 text-sm ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
-        />
-        <input
-          v-model="source"
-          type="text"
-          placeholder="Source (chanson, podcast…)"
-          class="w-full rounded-lg bg-slate-800 px-3 py-2 text-sm ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
-        />
-        <button type="submit" class="btn-primary w-full" :disabled="saving || !zh.trim()">
+      <form class="space-y-3 pt-2" @submit.prevent="addSentence">
+        <Textarea v-model="zh" required rows="2" class="hanzi" placeholder="Phrase en chinois" />
+        <Input v-model="fr" placeholder="Traduction (optionnel)" />
+        <Input v-model="source" placeholder="Source (chanson, podcast…)" />
+        <Button type="submit" variant="primary" full :disabled="saving || !zh.trim()">
           Ajouter la phrase
-        </button>
+        </Button>
       </form>
-    </div>
+    </section>
 
-    <button class="btn bg-red-900/40 text-red-200 hover:bg-red-900/60" @click="deleteCard">
+    <Separator />
+
+    <Button variant="ghost" full class="text-destructive hover:bg-destructive/10" @click="deleteCard">
       Supprimer cette carte
-    </button>
+    </Button>
   </section>
 
-  <section v-else class="mx-auto max-w-md px-4 pt-8 text-center text-slate-400">
+  <section v-else class="mx-auto max-w-xl px-6 pt-12 text-center text-sm text-muted-foreground">
     Carte introuvable.
-    <RouterLink to="/deck" class="block mt-4 text-brand-500">← Retour au deck</RouterLink>
+    <RouterLink to="/deck" class="mt-4 block underline underline-offset-4">← retour au deck</RouterLink>
   </section>
 </template>

@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { db, type DictEntry } from '../lib/db';
 import { useDeckStore } from '../stores/deck';
+import { Badge, Button, PageHeader, Progress, Sheet } from '../components/ui';
 
 const video = ref<HTMLVideoElement | null>(null);
 const canvas = ref<HTMLCanvasElement | null>(null);
@@ -27,6 +28,7 @@ interface ResolvedToken {
 const tokens = ref<ResolvedToken[]>([]);
 const selectedToken = ref<ResolvedToken | null>(null);
 const busyAddId = ref<string | null>(null);
+const sheetOpen = ref(false);
 
 async function startCamera() {
   cameraError.value = null;
@@ -98,7 +100,7 @@ function translateStatus(s: string): string {
     'initializing tesseract': 'Initialisation...',
     'loading language traineddata': 'Téléchargement modèle chinois (~15 Mo)...',
     'initializing api': 'Préparation...',
-    'recognizing text': 'Analyse de l\'image...',
+    'recognizing text': "Analyse de l'image...",
   };
   return map[s] ?? s;
 }
@@ -144,6 +146,7 @@ function reset() {
   ocrResult.value = '';
   tokens.value = [];
   selectedToken.value = null;
+  sheetOpen.value = false;
   if (!cameraReady.value) startCamera();
 }
 
@@ -162,131 +165,120 @@ function inDeck(token: ResolvedToken): boolean {
   return deck.cards.some((c) => c.simplified === token.entry!.simplified);
 }
 
+function onTokenTap(token: ResolvedToken) {
+  selectedToken.value = token;
+  sheetOpen.value = true;
+}
+
 onMounted(async () => {
   if (!deck.loaded) await deck.loadAll();
   startCamera();
 });
 
-onBeforeUnmount(() => {
-  stopCamera();
-});
+onBeforeUnmount(stopCamera);
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header>
-      <h1 class="text-2xl font-bold">Scanner</h1>
-      <p class="mt-1 text-sm text-slate-400">
-        Pointe ton appareil sur du texte chinois, puis touche les mots pour les traduire.
-      </p>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-6 px-6 pt-8">
+    <PageHeader
+      eyebrow="OCR"
+      title="Scanner"
+      subtitle="Pointe ton appareil sur du texte chinois."
+    />
 
     <div
       v-if="cameraError"
-      class="rounded-lg bg-red-900/40 p-4 text-sm text-red-200"
+      class="rounded-md border border-destructive/40 bg-destructive/10 p-4 text-sm text-destructive"
     >
-      <p class="font-semibold">Caméra inaccessible</p>
+      <p class="font-medium">Caméra inaccessible</p>
       <p class="mt-1 text-xs">{{ cameraError }}</p>
-      <p class="mt-2 text-xs text-red-300">
-        iOS Safari nécessite HTTPS + autorisation caméra. Si tu as refusé, va dans Réglages iOS →
-        Safari → Autoriser caméra.
+      <p class="mt-2 text-xs">
+        iOS Safari nécessite HTTPS + autorisation caméra.
       </p>
-      <button class="btn-ghost mt-3" @click="startCamera">Réessayer</button>
+      <Button variant="outline" size="sm" class="mt-3" @click="startCamera">Réessayer</Button>
     </div>
 
-    <div v-if="!capturedImage" class="relative overflow-hidden rounded-xl bg-black">
+    <div v-if="!capturedImage" class="relative overflow-hidden rounded-md border border-border bg-black">
       <video
         ref="video"
         class="block aspect-[3/4] w-full object-cover"
         playsinline
         muted
       />
-      <div
+      <p
         v-if="!cameraReady && !cameraError"
-        class="absolute inset-0 flex items-center justify-center text-sm text-slate-300"
+        class="absolute inset-0 flex items-center justify-center text-sm text-white"
       >
         Accès caméra...
-      </div>
+      </p>
     </div>
 
-    <div v-if="capturedImage" class="space-y-3">
-      <img :src="capturedImage" class="w-full rounded-xl" alt="Capture" />
-    </div>
+    <img v-if="capturedImage" :src="capturedImage" class="w-full rounded-md" alt="Capture" />
 
     <canvas ref="canvas" class="hidden" />
 
-    <div v-if="ocrRunning" class="card">
+    <div v-if="ocrRunning" class="space-y-2">
       <p class="text-sm">{{ ocrStatus }}</p>
-      <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-800">
-        <div class="h-full bg-brand-500 transition-[width]" :style="{ width: ocrProgress + '%' }" />
-      </div>
+      <Progress :value="ocrProgress" />
     </div>
 
-    <div v-if="!capturedImage && !cameraError" class="flex gap-2">
-      <button
-        class="btn-primary flex-1"
-        :disabled="!cameraReady"
-        @click="capture"
-      >
-        📸 Scanner
-      </button>
-    </div>
+    <Button v-if="!capturedImage && !cameraError" variant="primary" full :disabled="!cameraReady" @click="capture">
+      Scanner
+    </Button>
 
-    <div v-if="capturedImage && !ocrRunning" class="flex gap-2">
-      <button class="btn-ghost flex-1" @click="reset">↻ Nouveau scan</button>
-    </div>
+    <Button v-if="capturedImage && !ocrRunning" variant="outline" full @click="reset">
+      ↻ Nouveau scan
+    </Button>
 
-    <article v-if="tokens.length && !ocrRunning" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Texte détecté</h2>
-      <p class="mt-2 text-xs text-slate-500">
-        Tape sur un mot pour voir sa traduction. Les mots reconnus par le dictionnaire sont
-        soulignés.
-      </p>
-      <div class="hanzi mt-3 flex flex-wrap gap-1 text-2xl leading-loose">
+    <section v-if="tokens.length && !ocrRunning" class="space-y-3">
+      <p class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Texte détecté</p>
+      <div class="hanzi flex flex-wrap gap-1 text-2xl leading-loose">
         <button
           v-for="(t, i) in tokens"
           :key="i"
           class="rounded px-1 transition"
           :class="{
-            'bg-brand-500/20 underline decoration-brand-500 decoration-2 underline-offset-4 hover:bg-brand-500/30':
+            'underline decoration-primary/60 decoration-1 underline-offset-[3px] hover:bg-muted':
               t.entry,
-            'cursor-default text-slate-500': t.isHan && !t.entry,
-            'cursor-default text-slate-600': !t.isHan,
-            'bg-brand-500/40': selectedToken === t,
+            'cursor-default text-muted-foreground': t.isHan && !t.entry,
+            'cursor-default text-muted-foreground/60': !t.isHan,
+            'bg-primary/20': selectedToken === t,
           }"
           :disabled="!t.entry"
-          @click="selectedToken = t"
+          @click="onTokenTap(t)"
         >
           {{ t.text }}
         </button>
       </div>
-    </article>
+    </section>
 
-    <article v-if="selectedToken && selectedToken.entry" class="card">
-      <div class="flex items-baseline gap-2">
-        <span class="hanzi text-3xl font-semibold">{{ selectedToken.entry.simplified }}</span>
-        <span class="text-sm text-brand-500">{{ selectedToken.entry.pinyin }}</span>
-      </div>
-      <ul class="mt-2 space-y-0.5 text-sm text-slate-200">
-        <li v-for="(d, i) in selectedToken.entry.definitions.slice(0, 5)" :key="i">· {{ d }}</li>
-      </ul>
-      <button
-        class="btn mt-3 w-full"
-        :class="inDeck(selectedToken) ? 'bg-emerald-700 text-white' : 'btn-primary'"
-        :disabled="inDeck(selectedToken) || busyAddId !== null"
-        @click="addToDeck(selectedToken)"
-      >
-        <span v-if="inDeck(selectedToken)">✓ Déjà dans ton deck</span>
-        <span v-else-if="busyAddId">Ajout...</span>
-        <span v-else>+ Ajouter à mon deck</span>
-      </button>
-    </article>
+    <Sheet v-model:open="sheetOpen">
+      <template v-if="selectedToken && selectedToken.entry">
+        <div class="space-y-4">
+          <div class="flex items-baseline gap-3">
+            <span class="hanzi text-4xl font-semibold">{{ selectedToken.entry.simplified }}</span>
+            <span class="font-editorial text-lg text-primary">{{ selectedToken.entry.pinyin }}</span>
+            <Badge variant="outline" class="ml-auto">CFDICT</Badge>
+          </div>
+          <ul class="space-y-0.5 text-sm">
+            <li v-for="(d, i) in selectedToken.entry.definitions.slice(0, 5)" :key="i">— {{ d }}</li>
+          </ul>
+          <Button
+            :variant="inDeck(selectedToken) ? 'outline' : 'primary'"
+            full
+            :disabled="inDeck(selectedToken) || busyAddId !== null"
+            @click="addToDeck(selectedToken)"
+          >
+            <span v-if="inDeck(selectedToken)">✓ Déjà dans ton deck</span>
+            <span v-else-if="busyAddId">Ajout...</span>
+            <span v-else>+ Ajouter à mon deck</span>
+          </Button>
+        </div>
+      </template>
+    </Sheet>
 
-    <p class="mt-2 text-center text-xs text-slate-500">
-      OCR via <a class="underline" href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener">Tesseract.js</a>
-      — le premier scan télécharge ~15 Mo (modèle chinois), ensuite tout est offline.
+    <p class="text-center text-[11px] italic text-muted-foreground/70">
+      Tesseract.js · premier scan = 15 Mo téléchargés, puis offline.
     </p>
-
-    <RouterLink to="/dashboard" class="btn-ghost">← Dashboard</RouterLink>
   </section>
 </template>

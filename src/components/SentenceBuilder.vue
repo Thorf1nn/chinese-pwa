@@ -5,6 +5,7 @@ import { shuffleTokens } from '../lib/sentences';
 import { getOrCreateSentenceCard, previewSentenceIntervals, type SentenceRating } from '../lib/sentence-fsrs';
 import { db, type DictEntry, type SentenceCard } from '../lib/db';
 import { useDeckStore } from '../stores/deck';
+import { Badge, Button, Separator } from './ui';
 
 const props = defineProps<{ sentence: SentenceItem }>();
 const emit = defineEmits<{
@@ -31,43 +32,7 @@ const selectedLoading = ref(false);
 const busyAdd = ref(false);
 
 const HAN = /[\u3400-\u9FFF\uF900-\uFAFF]/;
-
-function isChinese(token: string): boolean {
-  return HAN.test(token);
-}
-
-async function selectToken(token: string) {
-  if (!isChinese(token)) return;
-  if (selectedToken.value === token) {
-    selectedToken.value = null;
-    selectedEntry.value = null;
-    return;
-  }
-  selectedToken.value = token;
-  selectedEntry.value = null;
-  selectedLoading.value = true;
-  try {
-    const entry = await db.dict.where('simplified').equals(token).first();
-    selectedEntry.value = entry ?? null;
-  } finally {
-    selectedLoading.value = false;
-  }
-}
-
-async function addSelectedToDeck() {
-  if (!selectedEntry.value) return;
-  busyAdd.value = true;
-  try {
-    await deckStore.addFromDictEntry(selectedEntry.value, ['sentence']);
-  } finally {
-    busyAdd.value = false;
-  }
-}
-
-const selectedInDeck = computed(() => {
-  if (!selectedEntry.value) return false;
-  return deckStore.cards.some((c) => c.simplified === selectedEntry.value!.simplified);
-});
+const isChinese = (token: string) => HAN.test(token);
 
 async function computeSentencePinyin() {
   const { pinyin } = await import('pinyin-pro');
@@ -126,34 +91,80 @@ const allowedRatings = computed<SentenceRating[]>(() =>
   result.value === 'correct' ? [2, 3, 4] : [1, 2]
 );
 
+const ratingLabels: Record<SentenceRating, string> = {
+  1: 'Encore',
+  2: 'Difficile',
+  3: 'Bien',
+  4: 'Facile',
+};
+
+const ratingTones: Record<SentenceRating, string> = {
+  1: 'hover:border-destructive/60 hover:bg-destructive/10',
+  2: 'hover:border-amber-500/60 hover:bg-amber-500/10',
+  3: 'hover:border-emerald-500/60 hover:bg-emerald-500/10',
+  4: 'hover:border-sky-500/60 hover:bg-sky-500/10',
+};
+
 function rate(r: SentenceRating) {
   emit('rated', props.sentence, r);
 }
+
+async function selectTokenInSentence(token: string) {
+  if (!isChinese(token)) return;
+  if (selectedToken.value === token) {
+    selectedToken.value = null;
+    selectedEntry.value = null;
+    return;
+  }
+  selectedToken.value = token;
+  selectedEntry.value = null;
+  selectedLoading.value = true;
+  try {
+    selectedEntry.value = (await db.dict.where('simplified').equals(token).first()) ?? null;
+  } finally {
+    selectedLoading.value = false;
+  }
+}
+
+async function addSelectedToDeck() {
+  if (!selectedEntry.value) return;
+  busyAdd.value = true;
+  try {
+    await deckStore.addFromDictEntry(selectedEntry.value, ['sentence']);
+  } finally {
+    busyAdd.value = false;
+  }
+}
+
+const selectedInDeck = computed(() => {
+  if (!selectedEntry.value) return false;
+  return deckStore.cards.some((c) => c.simplified === selectedEntry.value!.simplified);
+});
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
-    <div class="card">
-      <p class="text-xs uppercase tracking-wide text-slate-500">Phrase à reformer</p>
-      <p class="mt-2 text-lg italic text-slate-200">« {{ sentence.fr }} »</p>
+  <div class="flex flex-col gap-6">
+    <div>
+      <p class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Phrase à reformer</p>
+      <p class="mt-2 font-serif text-lg italic">« {{ sentence.fr }} »</p>
     </div>
 
     <div
-      class="min-h-[88px] rounded-2xl border-2 border-dashed p-3"
+      class="min-h-[92px] rounded-md border-2 border-dashed p-3 transition-colors"
       :class="{
-        'border-slate-700 bg-slate-900/50': result === 'pending',
-        'border-emerald-500 bg-emerald-900/30': result === 'correct',
-        'border-red-500 bg-red-900/30': result === 'wrong',
+        'border-border bg-muted/30': result === 'pending',
+        'border-emerald-500/60 bg-emerald-500/10': result === 'correct',
+        'border-destructive/60 bg-destructive/10': result === 'wrong',
       }"
     >
-      <div v-if="!built.length" class="text-center text-sm text-slate-500">
+      <p v-if="!built.length" class="text-center text-sm text-muted-foreground">
         Choisis les mots dans l'ordre ↓
-      </div>
+      </p>
       <div v-else class="flex flex-wrap gap-2">
         <button
           v-for="t in built"
           :key="t.uid"
-          class="hanzi rounded-lg bg-slate-700 px-3 py-2 text-lg shadow active:scale-95"
+          class="hanzi rounded-md border border-border bg-card px-3 py-2 text-lg active:scale-95"
           :disabled="result !== 'pending'"
           @click="unpick(t)"
         >
@@ -162,109 +173,88 @@ function rate(r: SentenceRating) {
       </div>
     </div>
 
-    <div class="flex flex-wrap gap-2">
+    <div v-if="available.length" class="flex flex-wrap gap-2">
       <button
         v-for="t in available"
         :key="t.uid"
-        class="hanzi rounded-lg bg-slate-800 px-3 py-2 text-lg ring-1 ring-slate-700 active:scale-95"
+        class="hanzi rounded-md border border-border bg-card px-3 py-2 text-lg transition hover:bg-muted active:scale-95"
         @click="pick(t)"
       >
         {{ t.value }}
       </button>
     </div>
 
-    <div v-if="result === 'wrong'" class="card">
-      <p class="text-center text-sm text-red-300">Pas tout à fait. La bonne phrase :</p>
-      <div class="hanzi mt-2 flex flex-wrap justify-center gap-1 text-2xl">
+    <Separator v-if="result !== 'pending'" />
+
+    <div v-if="result !== 'pending'">
+      <p class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+        <span v-if="result === 'correct'">Bonne phrase</span>
+        <span v-else>La bonne phrase</span>
+      </p>
+      <div class="mt-3 flex flex-wrap gap-1 text-2xl">
         <button
           v-for="(tok, i) in sentence.tokens"
           :key="i"
-          class="rounded px-1 transition"
+          class="hanzi rounded px-1 transition"
           :class="{
-            'cursor-pointer hover:bg-slate-700': isChinese(tok),
-            'bg-brand-500/40 underline decoration-brand-500 decoration-2 underline-offset-4':
+            'hover:bg-muted': isChinese(tok),
+            'bg-primary/20 underline decoration-primary underline-offset-[3px]':
               selectedToken === tok,
-            'cursor-default text-slate-500': !isChinese(tok),
+            'cursor-default text-muted-foreground': !isChinese(tok),
           }"
           :disabled="!isChinese(tok)"
-          @click="selectToken(tok)"
+          @click="selectTokenInSentence(tok)"
         >
           {{ tok }}
         </button>
       </div>
-      <p class="mt-1 text-center text-base text-brand-500">{{ sentencePinyin }}</p>
-      <p class="mt-2 text-center text-xs text-slate-500">
-        Tape sur un mot pour voir sa définition.
+      <p class="mt-2 font-editorial text-base text-primary">{{ sentencePinyin }}</p>
+      <p class="mt-1 text-[11px] text-muted-foreground">
+        Tape sur un mot pour sa définition.
       </p>
     </div>
 
-    <div v-if="result === 'correct'" class="card">
-      <p class="text-center text-sm text-emerald-300">🎉 Parfait !</p>
-      <div class="hanzi mt-2 flex flex-wrap justify-center gap-1 text-2xl">
-        <button
-          v-for="(tok, i) in sentence.tokens"
-          :key="i"
-          class="rounded px-1 transition"
-          :class="{
-            'cursor-pointer hover:bg-slate-700': isChinese(tok),
-            'bg-brand-500/40 underline decoration-brand-500 decoration-2 underline-offset-4':
-              selectedToken === tok,
-            'cursor-default text-slate-500': !isChinese(tok),
-          }"
-          :disabled="!isChinese(tok)"
-          @click="selectToken(tok)"
-        >
-          {{ tok }}
-        </button>
-      </div>
-      <p class="mt-1 text-center text-base text-brand-500">{{ sentencePinyin }}</p>
-      <p class="mt-2 text-center text-xs text-slate-500">
-        Tape sur un mot pour voir sa définition.
-      </p>
-    </div>
-
-    <div
-      v-if="selectedToken && (result === 'correct' || result === 'wrong')"
-      class="card border-l-4 border-brand-500"
-    >
-      <div v-if="selectedLoading" class="text-sm text-slate-400">Chargement...</div>
-      <div v-else-if="selectedEntry">
-        <div class="flex items-baseline gap-2">
+    <div v-if="selectedToken" class="rounded-md border-l-2 border-primary bg-muted/30 p-4">
+      <div v-if="selectedLoading" class="text-sm text-muted-foreground">Chargement...</div>
+      <div v-else-if="selectedEntry" class="space-y-3">
+        <div class="flex items-baseline gap-3">
           <span class="hanzi text-3xl font-semibold">{{ selectedEntry.simplified }}</span>
-          <span class="text-sm text-brand-500">{{ selectedEntry.pinyin }}</span>
+          <span class="font-editorial text-sm text-primary">{{ selectedEntry.pinyin }}</span>
+          <Badge variant="outline" class="ml-auto">CFDICT</Badge>
         </div>
-        <ul class="mt-2 space-y-0.5 text-sm text-slate-200">
-          <li v-for="(d, i) in selectedEntry.definitions.slice(0, 5)" :key="i">· {{ d }}</li>
+        <ul class="space-y-0.5 text-sm">
+          <li v-for="(d, i) in selectedEntry.definitions.slice(0, 5)" :key="i">— {{ d }}</li>
         </ul>
-        <button
-          class="btn mt-3 w-full"
-          :class="selectedInDeck ? 'bg-emerald-700 text-white' : 'btn-primary'"
+        <Button
+          :variant="selectedInDeck ? 'outline' : 'primary'"
           :disabled="selectedInDeck || busyAdd"
+          full
           @click="addSelectedToDeck"
         >
           <span v-if="selectedInDeck">✓ Déjà dans ton deck</span>
           <span v-else-if="busyAdd">Ajout...</span>
           <span v-else>+ Ajouter à mon deck</span>
-        </button>
+        </Button>
       </div>
-      <div v-else class="text-sm text-slate-400">
+      <p v-else class="text-sm text-muted-foreground">
         Aucune entrée dans le dictionnaire pour <span class="hanzi">{{ selectedToken }}</span>.
-      </div>
+      </p>
     </div>
 
     <div v-if="result === 'pending'" class="flex gap-2">
-      <button class="btn-ghost flex-1" @click="emit('skip', sentence)">Passer</button>
-      <button
-        class="btn-primary flex-1"
+      <Button variant="outline" full @click="emit('skip', sentence)">Passer</Button>
+      <Button
+        variant="primary"
+        full
         :disabled="built.length !== sentence.tokens.length"
         @click="check"
       >
         Valider
-      </button>
+      </Button>
     </div>
 
-    <div v-else-if="intervals" class="flex flex-col gap-2">
-      <p class="text-center text-xs text-slate-500">
+    <div v-else-if="intervals" class="space-y-3">
+      <p class="text-center text-xs text-muted-foreground">
         <span v-if="result === 'correct'">Comment tu l'as sentie ?</span>
         <span v-else>À revoir bientôt</span>
       </p>
@@ -272,22 +262,12 @@ function rate(r: SentenceRating) {
         <button
           v-for="r in allowedRatings"
           :key="r"
-          class="flex flex-col items-center gap-1 rounded-lg py-3 text-white transition active:scale-95"
-          :class="{
-            'bg-red-600 hover:bg-red-500': r === 1,
-            'bg-orange-500 hover:bg-orange-400': r === 2,
-            'bg-emerald-600 hover:bg-emerald-500': r === 3,
-            'bg-sky-600 hover:bg-sky-500': r === 4,
-          }"
+          class="flex flex-col items-center gap-1 rounded-md border border-border bg-card px-3 py-3 transition active:scale-95"
+          :class="ratingTones[r]"
           @click="rate(r)"
         >
-          <span class="text-xs font-semibold uppercase tracking-wide">
-            <span v-if="r === 1">Encore</span>
-            <span v-else-if="r === 2">Difficile</span>
-            <span v-else-if="r === 3">Bien</span>
-            <span v-else>Facile</span>
-          </span>
-          <span class="text-xs opacity-80">{{ intervals[r] }}</span>
+          <span class="text-xs font-medium">{{ ratingLabels[r] }}</span>
+          <span class="font-editorial text-[11px] tabular-nums text-muted-foreground">{{ intervals[r] }}</span>
         </button>
       </div>
     </div>

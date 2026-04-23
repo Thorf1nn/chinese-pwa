@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
 import { saveUserText } from '../lib/reader';
+import { Button, Input, PageHeader, Textarea } from '../components/ui';
 
 const router = useRouter();
 const title = ref('');
@@ -32,34 +33,32 @@ async function save() {
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header>
-      <RouterLink to="/read" class="text-sm text-slate-400">← Retour</RouterLink>
-      <h1 class="mt-2 text-2xl font-bold">Nouveau texte</h1>
-      <p class="mt-1 text-sm text-slate-400">
-        Colle ici un texte chinois : paroles, article, transcription de podcast...
-      </p>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
+    <PageHeader eyebrow="Nouveau texte" title="Coller un texte">
+      <template #action>
+        <RouterLink to="/read">
+          <Button variant="ghost" size="sm">retour</Button>
+        </RouterLink>
+      </template>
+    </PageHeader>
 
-    <form class="flex flex-col gap-3" @submit.prevent="save">
-      <div>
-        <label class="text-xs uppercase tracking-wide text-slate-400">Titre</label>
-        <input
-          v-model="title"
-          required
-          type="text"
-          placeholder="Paroles de 蛋堡 - 过程"
-          class="mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
-        />
+    <p class="text-sm text-muted-foreground">
+      Paroles, article, transcription de podcast...
+    </p>
+
+    <form class="space-y-6" @submit.prevent="save">
+      <div class="space-y-2">
+        <label class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Titre</label>
+        <Input v-model="title" required placeholder="Paroles de 蛋堡 · 过程" />
       </div>
 
-      <div>
-        <label class="text-xs uppercase tracking-wide text-slate-400">Niveau HSK (optionnel)</label>
-        <div class="mt-1 flex flex-wrap gap-2">
+      <div class="space-y-2">
+        <label class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Niveau HSK (optionnel)</label>
+        <div class="flex flex-wrap gap-2">
           <button
             type="button"
-            class="chip"
-            :class="hskLevel === null ? 'bg-brand-500 text-white' : ''"
+            class="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs transition"
+            :class="hskLevel === null ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'"
             @click="hskLevel = null"
           >
             —
@@ -68,8 +67,8 @@ async function save() {
             v-for="n in [1, 2, 3, 4, 5, 6]"
             :key="n"
             type="button"
-            class="chip"
-            :class="hskLevel === n ? 'bg-brand-500 text-white' : ''"
+            class="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs transition"
+            :class="hskLevel === n ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'"
             @click="hskLevel = n"
           >
             HSK {{ n }}
@@ -77,25 +76,20 @@ async function save() {
         </div>
       </div>
 
-      <div>
-        <label class="text-xs uppercase tracking-wide text-slate-400">Texte chinois</label>
-        <textarea
-          v-model="content"
-          required
-          rows="12"
-          placeholder="Colle ton texte chinois ici..."
-          class="hanzi mt-1 w-full rounded-lg bg-slate-800 px-3 py-2 text-base ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
-        />
+      <div class="space-y-2">
+        <label class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Texte chinois</label>
+        <Textarea v-model="content" required rows="12" class="hanzi min-h-[240px]" placeholder="Colle ton texte ici..." />
       </div>
 
-      <button
+      <Button
         type="submit"
-        class="btn-primary"
+        variant="primary"
+        full
         :disabled="!title.trim() || !content.trim() || saving"
       >
         <span v-if="saving">Enregistrement...</span>
         <span v-else>Commencer la lecture</span>
-      </button>
+      </Button>
     </form>
   </section>
 </template>

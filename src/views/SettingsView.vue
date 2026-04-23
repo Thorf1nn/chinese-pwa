@@ -2,8 +2,11 @@
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useDeckStore } from '../stores/deck';
+import { useThemeStore } from '../stores/theme';
+import { Button, Input, PageHeader, Separator } from '../components/ui';
 
 const deck = useDeckStore();
+const theme = useThemeStore();
 
 const newPerDay = ref(8);
 const saveStatus = ref<'' | 'saved'>('');
@@ -37,79 +40,109 @@ function setUnlimited() {
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Réglages</h1>
-      <RouterLink to="/dashboard" class="text-sm text-slate-400">← Dashboard</RouterLink>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
+    <PageHeader eyebrow="Réglages" title="Préférences">
+      <template #action>
+        <RouterLink to="/dashboard">
+          <Button variant="ghost" size="sm">retour</Button>
+        </RouterLink>
+      </template>
+    </PageHeader>
 
-    <article class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">
+    <section class="space-y-4">
+      <h2 class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Apparence</h2>
+      <div class="flex items-center justify-between gap-4 border-y border-border py-4">
+        <div>
+          <p class="font-medium">Thème</p>
+          <p class="text-xs text-muted-foreground">Clair inspiré d'un papier crème, ou sombre.</p>
+        </div>
+        <div class="flex gap-2">
+          <Button
+            size="sm"
+            :variant="theme.mode === 'light' ? 'primary' : 'outline'"
+            @click="theme.set('light')"
+          >
+            Clair
+          </Button>
+          <Button
+            size="sm"
+            :variant="theme.mode === 'dark' ? 'primary' : 'outline'"
+            @click="theme.set('dark')"
+          >
+            Sombre
+          </Button>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
         Nouveaux mots par jour
       </h2>
-      <p class="mt-1 text-xs text-slate-500">
-        Nombre max de cartes jamais vues qui t'apparaissent chaque jour. Les révisions FSRS
-        restent illimitées.
+      <p class="text-xs text-muted-foreground">
+        Nombre max de cartes jamais vues par jour. Les révisions FSRS restent illimitées.
       </p>
 
-      <div class="mt-4 flex items-center gap-3">
-        <input
+      <div class="flex items-center gap-3">
+        <Input
           v-model.number="newPerDay"
           type="number"
           min="0"
           max="500"
-          class="flex-1 rounded-lg bg-slate-800 px-3 py-3 text-center text-2xl font-bold ring-1 ring-slate-700 focus:outline-none focus:ring-brand-500"
+          class="h-12 text-center font-editorial text-xl"
         />
-        <button class="btn-primary" @click="save">Enregistrer</button>
+        <Button variant="primary" @click="save">Enregistrer</Button>
       </div>
 
-      <div class="mt-4 flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-1.5">
         <button
           v-for="n in presets"
           :key="n"
-          class="chip"
-          :class="newPerDay === n ? 'bg-brand-500 text-white' : ''"
+          class="inline-flex h-8 items-center rounded-sm border px-3 text-xs transition"
+          :class="newPerDay === n ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:bg-muted'"
           @click="applyPreset(n)"
         >
           {{ n }}/j
         </button>
         <button
-          class="chip"
-          :class="newPerDay >= 500 ? 'bg-brand-500 text-white' : ''"
+          class="inline-flex h-8 items-center rounded-sm border px-3 text-xs transition"
+          :class="newPerDay >= 500 ? 'border-primary bg-primary text-primary-foreground' : 'border-border hover:bg-muted'"
           @click="setUnlimited"
         >
-          ∞ Tout
+          ∞ tout
         </button>
       </div>
 
-      <p v-if="saveStatus === 'saved'" class="mt-3 text-xs text-emerald-400">✓ Enregistré</p>
+      <p v-if="saveStatus === 'saved'" class="text-xs text-emerald-700 dark:text-emerald-400">
+        ✓ Enregistré
+      </p>
 
-      <div class="mt-4 rounded-md bg-slate-800/50 p-3 text-xs text-slate-400">
-        <p class="font-semibold text-slate-200">État aujourd'hui</p>
+      <div class="mt-2 rounded-md border border-border bg-muted/30 p-4 text-xs text-muted-foreground">
+        <p class="font-medium text-foreground">Aujourd'hui</p>
         <p class="mt-1">
-          Vus : <span class="text-slate-200">{{ deck.newSeenToday }}</span> /
-          <span class="text-slate-200">{{ deck.newCardsPerDay }}</span>
+          Vus :
+          <span class="font-editorial text-foreground">{{ deck.newSeenToday }}</span>
+          /
+          <span class="font-editorial text-foreground">{{ deck.newCardsPerDay }}</span>
         </p>
         <p>
-          Il te reste <span class="text-emerald-400">{{ deck.newLeftToday }}</span> nouveau(x) à
-          découvrir aujourd'hui.
+          Il te reste
+          <span class="font-editorial text-emerald-700 dark:text-emerald-400">{{ deck.newLeftToday }}</span>
+          nouveau(x) à découvrir aujourd'hui.
         </p>
       </div>
-    </article>
+    </section>
 
-    <article class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">
-        Pourquoi un cap ?
-      </h2>
-      <ul class="mt-2 space-y-1 text-xs text-slate-400">
-        <li>
-          · FSRS fait revenir chaque carte plusieurs fois pour la fixer → 8 nouveaux/jour = en
-          général 20-30 cartes vues
-        </li>
-        <li>· Baisse à 3-5 si tu veux un rythme léger</li>
-        <li>· Monte à 20-30 pour rush un deck</li>
-        <li>· ∞ si tu veux tout voir sans filet (attention aux repasses)</li>
+    <Separator />
+
+    <section class="space-y-2">
+      <h2 class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Pourquoi un cap ?</h2>
+      <ul class="space-y-1 text-xs text-muted-foreground">
+        <li>— FSRS fait revenir chaque carte plusieurs fois : 8 nouveaux = ~20-30 cartes vues.</li>
+        <li>— 3-5 pour un rythme léger.</li>
+        <li>— 20-30 pour rush un deck.</li>
+        <li>— ∞ pour tout voir (attention aux repasses qui s'accumulent).</li>
       </ul>
-    </article>
+    </section>
   </section>
 </template>

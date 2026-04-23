@@ -22,6 +22,7 @@ import {
   type SentencesGlobalStats,
   type SentencesTodaySummary,
 } from '../lib/stats';
+import { Badge, Button, Card, PageHeader, Progress, Separator, Stat } from '../components/ui';
 
 const SENTENCE_QUEUE_KEY = 'chinese-pwa:sentenceQueue';
 
@@ -54,8 +55,8 @@ async function refresh() {
   sentencesToday.value = await getSentencesTodaySummary(readSentenceQueueLength());
   const levelInput = HSK_LEVELS.map((lvl) => ({ id: lvl.id, total: hsk.words(lvl.id).length }));
   levels.value = computeLevelProgress(deck.cards, levelInput);
-  leeches.value = findLeeches(deck.cards, 10);
-  sentenceLeeches.value = await findSentenceLeeches(10);
+  leeches.value = findLeeches(deck.cards, 8);
+  sentenceLeeches.value = await findSentenceLeeches(6);
   heatmap.value = await buildHeatmap(90);
   cardsGlobal.value = await getCardsGlobalStats(deck.cards);
   sentencesGlobal.value = await getSentencesGlobalStats();
@@ -69,9 +70,7 @@ onMounted(async () => {
   await refresh();
 });
 
-onActivated(() => {
-  refresh();
-});
+onActivated(refresh);
 
 watch(
   () => route.fullPath,
@@ -82,9 +81,7 @@ watch(
 
 watch(
   () => [deck.cards.length, deck.newSeenToday, deck.dueReviewCards.length],
-  () => {
-    refresh();
-  }
+  refresh
 );
 
 const heatmapWeeks = computed(() => {
@@ -96,11 +93,11 @@ const heatmapWeeks = computed(() => {
 });
 
 function heatColor(count: number): string {
-  if (count === 0) return 'bg-slate-800';
-  if (count < 5) return 'bg-emerald-900';
-  if (count < 15) return 'bg-emerald-700';
-  if (count < 30) return 'bg-emerald-500';
-  return 'bg-emerald-400';
+  if (count === 0) return 'bg-muted';
+  if (count < 5) return 'bg-primary/25';
+  if (count < 15) return 'bg-primary/50';
+  if (count < 30) return 'bg-primary/75';
+  return 'bg-primary';
 }
 
 function levelLabel(id: string): string {
@@ -119,134 +116,147 @@ function leechReason(r: LeechEntry): string {
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header class="flex items-start justify-between">
-      <div>
-        <h1 class="text-2xl font-bold">Dashboard</h1>
-        <p class="mt-1 text-sm text-slate-400">Ton progrès en un coup d'œil.</p>
-      </div>
-      <RouterLink
-        to="/settings"
-        class="rounded-lg p-2 text-xl hover:bg-slate-800"
-        title="Réglages"
-      >
-        ⚙️
-      </RouterLink>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-10 px-6 pt-8">
+    <PageHeader
+      eyebrow="Accueil"
+      title="Ton progrès"
+      subtitle="Ton apprentissage, au calme."
+    >
+      <template #action>
+        <RouterLink to="/settings">
+          <Button variant="ghost" size="icon" aria-label="Réglages">
+            <span class="text-base">⚙</span>
+          </Button>
+        </RouterLink>
+      </template>
+    </PageHeader>
 
-    <article v-if="cardsToday" class="card border-l-4 border-sky-500">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-sky-400">📚 Mots — Aujourd'hui</h2>
-      <div class="mt-3 grid grid-cols-2 gap-3">
-        <div>
-          <p class="text-3xl font-bold text-sky-400">{{ cardsToday.dueReviewsLeft }}</p>
-          <p class="text-xs text-slate-400">à revoir</p>
-        </div>
-        <div>
-          <p class="text-3xl font-bold text-emerald-400">{{ cardsToday.newLeft }}</p>
-          <p class="text-xs text-slate-400">nouveaux ({{ deck.newCardsPerDay }}/jour)</p>
-        </div>
+    <section v-if="cardsToday" class="space-y-5">
+      <div class="flex items-baseline justify-between">
+        <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          Mots · aujourd'hui
+        </h2>
+        <Badge v-if="cardsToday.reviewsDone > 0" variant="success">{{ cardsToday.correctRate }}% juste</Badge>
       </div>
-      <div v-if="cardsToday.reviewsDone > 0" class="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-300">
-        {{ cardsToday.reviewsDone }} cartes revues · <span class="text-emerald-400">{{ cardsToday.correctRate }}% juste</span>
+      <div class="grid grid-cols-2 gap-6">
+        <Stat :value="cardsToday.dueReviewsLeft" label="à revoir" />
+        <Stat
+          :value="cardsToday.newLeft"
+          label="nouveaux"
+          :hint="`${deck.newCardsPerDay}/jour`"
+        />
       </div>
+      <p v-if="cardsToday.reviewsDone > 0" class="text-sm text-muted-foreground">
+        {{ cardsToday.reviewsDone }} cartes revues depuis ce matin.
+      </p>
       <RouterLink
         v-if="cardsToday.dueReviewsLeft + cardsToday.newLeft > 0"
         to="/review"
-        class="btn-primary mt-4 w-full"
       >
-        Continuer la révision →
+        <Button variant="primary" full>Continuer la révision →</Button>
       </RouterLink>
-      <p v-else class="mt-4 text-center text-xs text-slate-500">🎉 Rien à faire pour aujourd'hui.</p>
-    </article>
+      <p v-else class="text-sm italic text-muted-foreground">Rien à faire pour aujourd'hui.</p>
+    </section>
 
-    <article v-if="sentencesToday" class="card border-l-4 border-purple-500">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-purple-400">🧩 Phrases — Aujourd'hui</h2>
-      <div class="mt-3 grid grid-cols-2 gap-3">
-        <div>
-          <p class="text-3xl font-bold text-purple-400">{{ sentencesToday.attempted }}</p>
-          <p class="text-xs text-slate-400">tentées</p>
-        </div>
-        <div>
-          <p class="text-3xl font-bold text-emerald-400">{{ sentencesToday.successRate }}%</p>
-          <p class="text-xs text-slate-400">réussies</p>
-        </div>
+    <Separator />
+
+    <section v-if="sentencesToday" class="space-y-5">
+      <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        Phrases · aujourd'hui
+      </h2>
+      <div class="grid grid-cols-2 gap-6">
+        <Stat :value="sentencesToday.attempted" label="tentées" />
+        <Stat :value="sentencesToday.successRate + '%'" label="réussies" />
       </div>
-      <div v-if="sentencesToday.inQueue > 0" class="mt-3 border-t border-slate-800 pt-3 text-sm text-slate-300">
-        {{ sentencesToday.inQueue }} phrase(s) à revoir dans la queue
-      </div>
-      <RouterLink to="/review" class="btn-ghost mt-4 w-full">
-        Pratiquer les phrases →
+      <p v-if="sentencesToday.inQueue > 0" class="text-sm text-muted-foreground">
+        {{ sentencesToday.inQueue }} phrase{{ sentencesToday.inQueue > 1 ? 's' : '' }} à revoir dans la queue.
+      </p>
+      <RouterLink to="/review">
+        <Button variant="outline" full>Pratiquer les phrases →</Button>
       </RouterLink>
-    </article>
+    </section>
 
-    <article class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Progression HSK</h2>
-      <div class="mt-3 space-y-3">
-        <div v-for="lvl in levels" :key="lvl.level">
+    <Separator />
+
+    <section class="space-y-5">
+      <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        Progression HSK
+      </h2>
+      <div class="space-y-4">
+        <div v-for="lvl in levels" :key="lvl.level" class="space-y-1.5">
           <div class="flex items-baseline justify-between text-sm">
-            <span class="font-semibold">{{ levelLabel(lvl.level) }}</span>
-            <span class="text-xs text-slate-400">
+            <span class="font-medium">{{ levelLabel(lvl.level) }}</span>
+            <span class="font-editorial text-xs tabular-nums text-muted-foreground">
               {{ lvl.mastered + lvl.learning + lvl.difficult }} / {{ lvl.total }}
             </span>
           </div>
-          <div class="mt-1 flex h-2 overflow-hidden rounded-full bg-slate-800">
-            <div class="bg-emerald-500" :style="{ width: barPct(lvl.mastered, lvl.total) + '%' }" />
-            <div class="bg-amber-500" :style="{ width: barPct(lvl.learning, lvl.total) + '%' }" />
-            <div class="bg-red-500" :style="{ width: barPct(lvl.difficult, lvl.total) + '%' }" />
-          </div>
+          <Progress
+            :segments="[
+              { value: barPct(lvl.mastered, lvl.total), class: 'bg-emerald-500/80' },
+              { value: barPct(lvl.learning, lvl.total), class: 'bg-amber-500/80' },
+              { value: barPct(lvl.difficult, lvl.total), class: 'bg-destructive/80' },
+            ]"
+          />
         </div>
       </div>
-      <div class="mt-3 flex items-center gap-3 text-xs text-slate-500">
-        <span class="flex items-center gap-1"><i class="inline-block h-2 w-2 rounded-full bg-emerald-500" />maîtrisés</span>
-        <span class="flex items-center gap-1"><i class="inline-block h-2 w-2 rounded-full bg-amber-500" />en cours</span>
-        <span class="flex items-center gap-1"><i class="inline-block h-2 w-2 rounded-full bg-red-500" />difficiles</span>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+        <span class="flex items-center gap-1.5"><i class="block h-1.5 w-1.5 rounded-full bg-emerald-500/80" />maîtrisés</span>
+        <span class="flex items-center gap-1.5"><i class="block h-1.5 w-1.5 rounded-full bg-amber-500/80" />en cours</span>
+        <span class="flex items-center gap-1.5"><i class="block h-1.5 w-1.5 rounded-full bg-destructive/80" />difficiles</span>
       </div>
-    </article>
+    </section>
 
-    <article v-if="leeches.length" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">📚 Mots à retravailler 🔴</h2>
-      <ul class="mt-3 space-y-2">
+    <Separator v-if="leeches.length" />
+
+    <section v-if="leeches.length" class="space-y-4">
+      <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        Mots à retravailler
+      </h2>
+      <ul class="divide-y divide-border border-y border-border">
         <li v-for="l in leeches" :key="l.card.id">
           <RouterLink
             :to="{ name: 'card', params: { id: l.card.id } }"
-            class="flex items-center justify-between rounded-lg bg-slate-800/60 p-2 hover:bg-slate-800"
+            class="flex items-center justify-between gap-3 py-3 transition-colors hover:text-primary"
           >
             <div class="min-w-0">
-              <p class="hanzi text-lg">{{ l.card.simplified }}</p>
-              <p class="text-xs text-slate-400">
-                <span class="text-brand-500">{{ l.card.pinyin }}</span>
-                · {{ l.card.definitions[0] }}
+              <p class="hanzi text-xl font-medium">{{ l.card.simplified }}</p>
+              <p class="text-xs text-muted-foreground">
+                {{ l.card.pinyin }} — {{ l.card.definitions[0] }}
               </p>
             </div>
-            <span class="chip bg-red-900 text-red-200">{{ leechReason(l) }}</span>
+            <Badge variant="destructive">{{ leechReason(l) }}</Badge>
           </RouterLink>
         </li>
       </ul>
-    </article>
+    </section>
 
-    <article v-if="sentenceLeeches.length" class="card">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">🧩 Phrases difficiles 🔴</h2>
-      <ul class="mt-3 space-y-2">
-        <li
-          v-for="s in sentenceLeeches"
-          :key="s.zh"
-          class="rounded-lg bg-slate-800/60 p-2"
-        >
+    <Separator v-if="sentenceLeeches.length" />
+
+    <section v-if="sentenceLeeches.length" class="space-y-4">
+      <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        Phrases difficiles
+      </h2>
+      <ul class="divide-y divide-border border-y border-border">
+        <li v-for="s in sentenceLeeches" :key="s.zh" class="py-3">
           <p class="hanzi text-lg">{{ s.zh }}</p>
-          <p class="text-xs text-slate-300">{{ s.fr }}</p>
-          <p class="mt-1 text-xs text-red-300">
-            {{ s.failures }} échec(s) sur {{ s.attempts }} tentative(s)
+          <p class="mt-0.5 text-xs text-muted-foreground">{{ s.fr }}</p>
+          <p class="mt-1 text-[11px] uppercase tracking-wide text-destructive/80">
+            {{ s.failures }} échec{{ s.failures > 1 ? 's' : '' }} sur {{ s.attempts }} tentative{{ s.attempts > 1 ? 's' : '' }}
           </p>
         </li>
       </ul>
-    </article>
+    </section>
 
-    <article v-if="heatmap.length" class="card">
+    <Separator v-if="heatmap.length" />
+
+    <section v-if="heatmap.length" class="space-y-4">
       <div class="flex items-baseline justify-between">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-400">90 derniers jours</h2>
-        <span v-if="streak > 0" class="chip bg-orange-900 text-orange-200">🔥 {{ streak }}j d'affilée</span>
+        <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          90 derniers jours
+        </h2>
+        <Badge v-if="streak > 0" variant="primary">🔥 {{ streak }} j</Badge>
       </div>
-      <div class="mt-3 flex gap-[3px] overflow-x-auto pb-1">
+      <div class="flex gap-[3px] overflow-x-auto pb-1">
         <div v-for="(week, wi) in heatmapWeeks" :key="wi" class="flex flex-col gap-[3px]">
           <div
             v-for="(day, di) in week"
@@ -257,49 +267,27 @@ function leechReason(r: LeechEntry): string {
           />
         </div>
       </div>
-      <p class="mt-2 text-xs text-slate-500">Mots et phrases combinés</p>
-    </article>
+      <p class="text-[11px] text-muted-foreground">Mots et phrases combinés</p>
+    </section>
 
-    <article v-if="cardsGlobal" class="card border-l-4 border-sky-500">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-sky-400">📚 Mots — Total</h2>
-      <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
-        <div>
-          <p class="text-2xl font-bold">{{ cardsGlobal.totalCards }}</p>
-          <p class="text-xs text-slate-400">cartes</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold">{{ cardsGlobal.totalReviews }}</p>
-          <p class="text-xs text-slate-400">révisions</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-emerald-400">{{ cardsGlobal.retention }}%</p>
-          <p class="text-xs text-slate-400">rétention</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold">+{{ cardsGlobal.addedThisWeek }}</p>
-          <p class="text-xs text-slate-400">cette semaine</p>
-        </div>
+    <Separator v-if="cardsGlobal" />
+
+    <section v-if="cardsGlobal && sentencesGlobal" class="space-y-6">
+      <h2 class="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        Tout le temps
+      </h2>
+      <div class="grid grid-cols-2 gap-x-6 gap-y-8">
+        <Stat :value="cardsGlobal.totalCards" label="mots au total" />
+        <Stat :value="cardsGlobal.retention + '%'" label="rétention mots" />
+        <Stat :value="sentencesGlobal.uniqueSeen" label="phrases vues" />
+        <Stat :value="sentencesGlobal.successRate + '%'" label="réussite phrases" />
       </div>
-    </article>
+    </section>
 
-    <article v-if="sentencesGlobal" class="card border-l-4 border-purple-500">
-      <h2 class="text-sm font-semibold uppercase tracking-wide text-purple-400">🧩 Phrases — Total</h2>
-      <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
-        <div>
-          <p class="text-2xl font-bold">{{ sentencesGlobal.uniqueSeen }}</p>
-          <p class="text-xs text-slate-400">phrases uniques vues</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold">{{ sentencesGlobal.totalAttempts }}</p>
-          <p class="text-xs text-slate-400">tentatives totales</p>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-emerald-400">{{ sentencesGlobal.successRate }}%</p>
-          <p class="text-xs text-slate-400">de réussite</p>
-        </div>
-      </div>
-    </article>
+    <Separator />
 
-    <RouterLink to="/deck" class="btn-ghost">Voir toutes mes cartes →</RouterLink>
+    <RouterLink to="/deck" class="text-sm underline underline-offset-4">
+      Voir toutes mes cartes →
+    </RouterLink>
   </section>
 </template>

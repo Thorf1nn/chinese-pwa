@@ -5,6 +5,7 @@ import { searchDictionary } from '../lib/search';
 import { useDeckStore } from '../stores/deck';
 import { useDictStore } from '../stores/dict';
 import DictEntryCard from '../components/DictEntryCard.vue';
+import { Input, PageHeader } from '../components/ui';
 
 const deck = useDeckStore();
 const dict = useDictStore();
@@ -52,32 +53,31 @@ async function add(entry: DictEntry) {
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header>
-      <h1 class="text-2xl font-bold">Chercher un mot</h1>
-      <p class="mt-1 text-sm text-slate-400">Hanzi, pinyin (sans tons ok) ou mot français.</p>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-6 px-6 pt-8">
+    <PageHeader
+      eyebrow="Dictionnaire"
+      title="Chercher"
+      subtitle="Hanzi, pinyin (sans tons), ou mot français."
+    />
 
-    <input
+    <Input
       v-model="query"
       type="search"
       inputmode="search"
       autofocus
       placeholder="你好, ni hao, bonjour…"
-      class="w-full rounded-xl bg-slate-900 px-4 py-3 text-lg ring-1 ring-slate-800 focus:outline-none focus:ring-brand-500"
+      class="h-12 text-base"
     />
 
-    <p v-if="dict.status !== 'ready'" class="text-sm text-slate-500">
+    <p v-if="dict.status !== 'ready'" class="text-sm text-muted-foreground">
       Dictionnaire en cours de chargement…
     </p>
-
-    <p v-else-if="loading" class="text-sm text-slate-500">Recherche…</p>
-
-    <div v-else-if="query && results.length === 0" class="card text-center text-slate-400">
+    <p v-else-if="loading" class="text-sm text-muted-foreground">Recherche…</p>
+    <p v-else-if="query && results.length === 0" class="text-sm text-muted-foreground">
       Aucun résultat.
-    </div>
+    </p>
 
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-5">
       <DictEntryCard
         v-for="entry in results"
         :key="entry.id"

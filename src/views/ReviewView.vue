@@ -6,11 +6,11 @@ import { previewIntervals, type ReviewRating } from '../lib/fsrs';
 import { buildQuizQuestion, type QuizQuestion } from '../lib/quiz';
 import { loadSentences, pickSentence, type SentenceItem } from '../lib/sentences';
 import { submitSentenceReview, type SentenceRating } from '../lib/sentence-fsrs';
-type _KeepRating = SentenceRating;
 import Flashcard from '../components/Flashcard.vue';
 import ReviewButtons from '../components/ReviewButtons.vue';
 import QuizCard from '../components/QuizCard.vue';
 import SentenceBuilder from '../components/SentenceBuilder.vue';
+import { Badge, Button, Card, PageHeader, Separator, Tabs } from '../components/ui';
 
 type Mode = 'quiz' | 'sentences';
 const MODE_KEY = 'chinese-pwa:reviewMode';
@@ -53,7 +53,7 @@ function saveSentenceQueue() {
   try {
     localStorage.setItem(SENTENCE_QUEUE_KEY, JSON.stringify(sentenceQueue.value));
   } catch {
-    // quota plein, on ignore
+    // quota
   }
 }
 
@@ -97,15 +97,6 @@ function nextSentence() {
     return;
   }
   currentSentence.value = freshSentence();
-}
-
-function requeueAndNext(failed: SentenceItem) {
-  sentenceQueue.value.push(failed);
-  const next =
-    sentenceQueue.value.length > SENTENCE_REQUEUE_OFFSET
-      ? sentenceQueue.value.shift() ?? null
-      : freshSentence();
-  currentSentence.value = next;
 }
 
 const lockedCardId = ref<string | null>(null);
@@ -166,7 +157,19 @@ const quizAllowedRatings = computed<ReviewRating[]>(() =>
   quizCorrectCount.value === 2 ? [2, 3, 4] : [1, 2]
 );
 
-const quizIntervals = computed(() => (current.value ? previewIntervals(current.value) : null));
+const ratingLabels: Record<ReviewRating, string> = {
+  1: 'Encore',
+  2: 'Difficile',
+  3: 'Bien',
+  4: 'Facile',
+};
+
+const ratingTones: Record<ReviewRating, string> = {
+  1: 'hover:border-destructive/60 hover:bg-destructive/10',
+  2: 'hover:border-amber-500/60 hover:bg-amber-500/10',
+  3: 'hover:border-emerald-500/60 hover:bg-emerald-500/10',
+  4: 'hover:border-sky-500/60 hover:bg-sky-500/10',
+};
 
 async function onSentenceRated(s: SentenceItem, rating: SentenceRating) {
   await submitSentenceReview(s.zh, s.fr, s.tokens, rating);
@@ -185,115 +188,103 @@ async function onSentenceRated(s: SentenceItem, rating: SentenceRating) {
 function onSentenceSkip() {
   nextSentence();
 }
+
+const stepCount = computed(() =>
+  mode.value === 'quiz'
+    ? deck.dueReviewCards.length + deck.queuedNewCards.length
+    : null
+);
 </script>
 
 <template>
-  <section class="mx-auto flex min-h-full max-w-md flex-col gap-4 px-4 pt-4 pb-4">
-    <header class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Révision</h1>
-      <div class="flex items-center gap-2 text-xs">
-        <span class="chip bg-sky-900 text-sky-100">{{ deck.dueReviewCards.length }} révisions</span>
-        <span class="chip bg-emerald-900 text-emerald-100">
-          {{ deck.queuedNewCards.length }} nouv. ({{ deck.newLeftToday }}/{{ deck.newCardsPerDay }})
-        </span>
-      </div>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
+    <PageHeader
+      eyebrow="Révision"
+      :title="mode === 'quiz' ? 'Quiz' : 'Phrases'"
+      :subtitle="mode === 'quiz' ? 'Reconnais le mot dans son contexte.' : 'Remets les mots dans le bon ordre.'"
+    >
+      <template #action>
+        <RouterLink to="/dashboard">
+          <Button variant="ghost" size="sm">retour</Button>
+        </RouterLink>
+      </template>
+    </PageHeader>
 
-    <div class="flex gap-2">
-      <button
-        class="btn flex-1 text-sm"
-        :class="mode === 'quiz' ? 'bg-brand-500 text-white' : 'btn-ghost'"
-        @click="mode = 'quiz'"
-      >
-        🧠 Quiz
-      </button>
-      <button
-        class="btn flex-1 text-sm"
-        :class="mode === 'sentences' ? 'bg-brand-500 text-white' : 'btn-ghost'"
-        @click="mode = 'sentences'"
-      >
-        🧩 Phrases
-      </button>
+    <div class="flex items-baseline justify-between text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+      <span v-if="mode === 'quiz'">
+        <span class="font-editorial text-sm">{{ deck.dueReviewCards.length }}</span> à revoir ·
+        <span class="font-editorial text-sm">{{ deck.queuedNewCards.length }}</span> nouveaux ({{ deck.newLeftToday }}/{{ deck.newCardsPerDay }})
+      </span>
+      <span v-else>
+        <span class="font-editorial text-sm">{{ sentenceQueue.length }}</span> en queue
+      </span>
     </div>
 
-    <p v-if="useClassicFallback && current" class="rounded-md bg-amber-900/30 p-2 text-center text-xs text-amber-200">
+    <Tabs
+      v-model="mode"
+      :items="[
+        { value: 'quiz', label: 'Quiz' },
+        { value: 'sentences', label: 'Phrases' },
+      ]"
+    />
+
+    <p v-if="useClassicFallback && current" class="rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-center text-xs text-amber-700 dark:text-amber-400">
       Quiz indisponible (deck &lt; 4 cartes) — mode classique utilisé.
     </p>
 
-    <details class="rounded-md bg-slate-900 p-2 text-xs text-slate-400">
-      <summary class="cursor-pointer select-none">🔬 Debug état</summary>
-      <pre class="mt-2 overflow-x-auto whitespace-pre-wrap">
-Total cartes: {{ deck.totalCount }}
-Nouvelles (state 0): {{ deck.newCount }}
-Dues (review): {{ deck.dueReviewCards.length }}
-Nouvelles disponibles maintenant: {{ deck.availableNewCards.length }}
-Nouvelles autorisées aujourd'hui: {{ deck.newLeftToday }} / {{ deck.newCardsPerDay }}
-Nouvelles déjà vues aujourd'hui: {{ deck.newSeenToday }}
-Queue finale (dueCards): {{ deck.dueCards.length }}
-Carte actuelle: {{ current ? current.simplified + ' (state=' + current.state + ', due=' + new Date(current.due).toLocaleTimeString() + ')' : 'aucune' }}</pre>
-    </details>
-
     <template v-if="current && useClassicFallback && intervals">
       <Flashcard ref="flashcard" :card="current" />
-      <div>
-        <ReviewButtons
-          v-if="flashcard?.revealed"
-          :intervals="intervals"
-          @rate="rate"
-        />
-        <p v-else class="text-center text-xs text-slate-500">
-          Tape "Afficher la réponse" pour évaluer.
-        </p>
-      </div>
+      <ReviewButtons
+        v-if="flashcard?.revealed"
+        :intervals="intervals"
+        @rate="rate"
+      />
+      <p v-else class="text-center text-xs text-muted-foreground">
+        Tape "Afficher la réponse" pour évaluer.
+      </p>
     </template>
 
     <template v-else-if="current && mode === 'quiz' && quizQuestion">
       <QuizCard :question="quizQuestion" @done="onQuizDone" />
-      <div v-if="quizDone && quizIntervals" class="flex flex-col gap-3">
-        <p class="text-center text-xs text-slate-500">
-          <span v-if="quizCorrectCount === 2" class="text-emerald-400">2/2 bons — comment tu t'en es sorti ?</span>
-          <span v-else-if="quizCorrectCount === 1" class="text-amber-400">1/2 — à revoir bientôt</span>
-          <span v-else class="text-red-400">0/2 — on recommence</span>
+      <div v-if="quizDone && intervals" class="space-y-3">
+        <p class="text-center text-xs">
+          <span v-if="quizCorrectCount === 2" class="text-emerald-700 dark:text-emerald-400">2/2 · comment tu t'en es sorti ?</span>
+          <span v-else-if="quizCorrectCount === 1" class="text-amber-700 dark:text-amber-400">1/2 · à revoir bientôt</span>
+          <span v-else class="text-destructive">0/2 · on recommence</span>
         </p>
         <div class="grid gap-2" :class="quizAllowedRatings.length === 2 ? 'grid-cols-2' : 'grid-cols-3'">
           <button
             v-for="r in quizAllowedRatings"
             :key="r"
-            class="flex flex-col items-center gap-1 rounded-lg py-3 text-white transition active:scale-95"
-            :class="{
-              'bg-red-600 hover:bg-red-500': r === 1,
-              'bg-orange-500 hover:bg-orange-400': r === 2,
-              'bg-emerald-600 hover:bg-emerald-500': r === 3,
-              'bg-sky-600 hover:bg-sky-500': r === 4,
-            }"
+            class="flex flex-col items-center gap-1 rounded-md border border-border bg-card px-3 py-3 transition active:scale-95"
+            :class="ratingTones[r]"
             @click="rateFromQuiz(r)"
           >
-            <span class="text-xs font-semibold uppercase tracking-wide">
-              <span v-if="r === 1">Encore</span>
-              <span v-else-if="r === 2">Difficile</span>
-              <span v-else-if="r === 3">Bien</span>
-              <span v-else>Facile</span>
-            </span>
-            <span class="text-xs opacity-80">{{ quizIntervals[r] }}</span>
+            <span class="text-xs font-medium">{{ ratingLabels[r] }}</span>
+            <span class="font-editorial text-[11px] tabular-nums text-muted-foreground">{{ intervals[r] }}</span>
           </button>
         </div>
-        <button
+        <Button
           v-if="!showFullCard && current.sentences.length"
-          class="btn-ghost text-sm"
+          variant="ghost"
+          size="sm"
+          full
           @click="showFullCard = true"
         >
-          👁 Voir les exemples
-        </button>
-        <div v-if="showFullCard" class="card text-left">
-          <p class="text-xs uppercase tracking-wide text-slate-500">Exemples</p>
+          Voir les exemples
+        </Button>
+        <div v-if="showFullCard && current.sentences.length" class="border-l-2 border-primary/40 pl-4">
+          <p class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Exemples</p>
           <div
             v-for="s in current.sentences"
             :key="s.id"
-            class="mt-2 rounded bg-slate-800/60 p-2 text-sm"
+            class="mt-3 space-y-1"
           >
-            <p class="hanzi">{{ s.zh }}</p>
-            <p v-if="s.fr" class="text-slate-300">{{ s.fr }}</p>
-            <p v-if="s.source" class="text-xs text-slate-500">— {{ s.source }}</p>
+            <p class="hanzi text-base">{{ s.zh }}</p>
+            <p v-if="s.fr" class="text-sm text-muted-foreground">{{ s.fr }}</p>
+            <p v-if="s.source" class="text-[11px] uppercase tracking-wide text-muted-foreground/70">
+              — {{ s.source }}
+            </p>
           </div>
         </div>
       </div>
@@ -306,44 +297,47 @@ Carte actuelle: {{ current ? current.simplified + ' (state=' + current.state + '
         @rated="onSentenceRated"
         @skip="onSentenceSkip"
       />
-      <div v-else class="flex flex-1 items-center justify-center text-slate-500">
+      <p v-else class="py-12 text-center text-sm text-muted-foreground">
         {{ sentencesLoading ? 'Chargement des phrases…' : 'Aucune phrase disponible' }}
-      </div>
+      </p>
     </template>
 
-    <div v-else-if="!deck.loaded" class="flex flex-1 items-center justify-center text-slate-500">
+    <div
+      v-else-if="!deck.loaded"
+      class="py-12 text-center text-sm text-muted-foreground"
+    >
       Chargement…
     </div>
 
     <div
       v-else-if="deck.totalCount === 0"
-      class="flex flex-1 flex-col items-center justify-center text-center"
+      class="flex flex-col items-center gap-4 py-12 text-center"
     >
-      <p class="text-4xl">📖</p>
-      <p class="mt-4 text-lg font-semibold">Ton deck est vide</p>
-      <p class="mt-1 text-sm text-slate-400">
-        Commence avec un deck HSK ou cherche des mots à la main.
+      <p class="font-serif text-2xl italic text-muted-foreground">Ton deck est vide</p>
+      <p class="text-sm text-muted-foreground">
+        Commence avec un deck HSK ou cherche des mots.
       </p>
-      <div class="mt-6 flex gap-2">
-        <RouterLink to="/decks" class="btn-primary">Importer HSK</RouterLink>
-        <RouterLink to="/search" class="btn-ghost">Chercher</RouterLink>
+      <div class="flex gap-3 pt-2">
+        <RouterLink to="/decks"><Button variant="primary">Importer HSK</Button></RouterLink>
+        <RouterLink to="/search"><Button variant="outline">Chercher</Button></RouterLink>
       </div>
     </div>
 
     <div
       v-else
-      class="flex flex-1 flex-col items-center justify-center text-center"
+      class="flex flex-col items-center gap-4 py-12 text-center"
     >
-      <p class="text-5xl">🎉</p>
-      <p class="mt-4 text-lg font-semibold">Tout est à jour !</p>
-      <p v-if="deck.newCount > 0 && deck.newLeftToday === 0" class="mt-1 text-sm text-slate-400">
+      <p class="font-serif text-2xl italic">Tout est à jour</p>
+      <p v-if="deck.newCount > 0 && deck.newLeftToday === 0" class="max-w-xs text-sm text-muted-foreground">
         Tu as vu tes {{ deck.newCardsPerDay }} nouveaux mots du jour.
-        <span class="block mt-1">{{ deck.newCount }} nouveaux en attente pour demain.</span>
+        <span class="block">{{ deck.newCount }} nouveaux en attente pour demain.</span>
       </p>
-      <p v-else class="mt-1 text-sm text-slate-400">
+      <p v-else class="max-w-xs text-sm text-muted-foreground">
         Rien à réviser pour l'instant. Reviens plus tard ou ajoute des mots.
       </p>
-      <RouterLink to="/deck" class="btn-ghost mt-6">Voir mon deck</RouterLink>
+      <RouterLink to="/deck" class="pt-2">
+        <Button variant="outline">Voir mon deck</Button>
+      </RouterLink>
     </div>
   </section>
 </template>

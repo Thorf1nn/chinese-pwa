@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useDeckStore } from '../stores/deck';
 import { HSK_LEVELS, useHskStore, type HskLevel } from '../stores/hsk';
+import { Badge, Button, PageHeader, Progress, Separator } from '../components/ui';
 
 const deck = useDeckStore();
 const hsk = useHskStore();
@@ -33,7 +34,7 @@ const progress = computed(() => {
 async function importLevel(level: HskLevel) {
   if (importing.value) return;
   const total = totalInLevel(level);
-  if (!confirm(`Importer ${total} mots du niveau ${level.toUpperCase()} ?\n\nTes réglages limitent les nouveaux mots à ${deck.newCardsPerDay}/jour — pas d'inquiétude, tu ne verras pas tout d'un coup.`)) {
+  if (!confirm(`Importer ${total} mots du niveau ${level.toUpperCase()} ?\n\nLes nouveaux mots restent limités à ${deck.newCardsPerDay}/jour.`)) {
     return;
   }
   importing.value = level;
@@ -51,75 +52,73 @@ async function importLevel(level: HskLevel) {
     importing.value = null;
   }
 }
+
+function isComplete(level: HskLevel) {
+  return cardsInLevel(level) >= totalInLevel(level) && totalInLevel(level) > 0;
+}
 </script>
 
 <template>
-  <section class="mx-auto flex max-w-md flex-col gap-4 px-4 pt-4">
-    <header>
-      <h1 class="text-2xl font-bold">Decks HSK</h1>
-      <p class="mt-1 text-sm text-slate-400">
-        Importe les listes officielles. Nouveau par jour :
-        <span class="font-semibold text-slate-200">{{ deck.newCardsPerDay }}</span>
-      </p>
-    </header>
+  <section class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
+    <PageHeader
+      eyebrow="Decks HSK"
+      title="Listes officielles"
+      subtitle="Importe un niveau d'un coup. Le cap nouveaux/jour s'applique."
+    />
 
-    <div v-if="hsk.loading" class="card text-center text-slate-400">Chargement des listes…</div>
+    <p class="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+      Nouveau par jour :
+      <span class="font-editorial text-sm text-foreground">{{ deck.newCardsPerDay }}</span>
+    </p>
+
+    <p v-if="hsk.loading" class="text-sm text-muted-foreground">Chargement des listes…</p>
 
     <div
       v-if="lastImport"
-      class="rounded-lg border border-emerald-700 bg-emerald-900/20 p-3 text-sm"
+      class="rounded-md border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-emerald-700 dark:text-emerald-400"
     >
-      <p class="font-semibold text-emerald-200">
-        {{ lastImport.level.toUpperCase() }} importé 🎉
-      </p>
-      <p class="mt-1 text-emerald-300">
-        +{{ lastImport.added }} ajoutés · {{ lastImport.already }} déjà présents
-        <span v-if="lastImport.missing"> · {{ lastImport.missing }} non trouvés</span>
-      </p>
+      {{ lastImport.level.toUpperCase() }} importé — +{{ lastImport.added }} ajouté(s),
+      {{ lastImport.already }} déjà là<span v-if="lastImport.missing">, {{ lastImport.missing }} non trouvés</span>.
     </div>
 
-    <div class="flex flex-col gap-3">
-      <article v-for="lvl in HSK_LEVELS" :key="lvl.id" class="card">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="flex items-center gap-2">
-              <span
-                class="inline-block h-3 w-3 rounded-full"
-                :class="lvl.color"
-              />
-              <h2 class="text-lg font-semibold">{{ lvl.label }}</h2>
-            </div>
-            <p class="mt-1 text-sm text-slate-400">
-              {{ cardsInLevel(lvl.id) }} / {{ totalInLevel(lvl.id) }} mots dans ton deck
+    <ul class="divide-y divide-border border-y border-border">
+      <li v-for="lvl in HSK_LEVELS" :key="lvl.id" class="py-5">
+        <div class="flex items-start justify-between gap-4">
+          <div class="min-w-0">
+            <p class="font-serif text-xl font-semibold">{{ lvl.label }}</p>
+            <p class="mt-0.5 text-xs text-muted-foreground">
+              {{ cardsInLevel(lvl.id) }} / {{ totalInLevel(lvl.id) }} mots
             </p>
           </div>
-          <button
-            class="btn"
-            :class="cardsInLevel(lvl.id) >= totalInLevel(lvl.id) && totalInLevel(lvl.id) > 0 ? 'bg-emerald-700 text-white' : 'btn-primary'"
+          <Button
+            v-if="isComplete(lvl.id)"
+            variant="outline"
+            size="sm"
+            disabled
+          >
+            ✓ complet
+          </Button>
+          <Button
+            v-else
+            variant="primary"
+            size="sm"
             :disabled="importing !== null || !totalInLevel(lvl.id)"
             @click="importLevel(lvl.id)"
           >
-            <span v-if="importing === lvl.id">Import…</span>
-            <span v-else-if="cardsInLevel(lvl.id) >= totalInLevel(lvl.id) && totalInLevel(lvl.id) > 0">
-              ✓ Complet
-            </span>
-            <span v-else-if="cardsInLevel(lvl.id) > 0">Compléter</span>
-            <span v-else>Importer</span>
-          </button>
+            <span v-if="importing === lvl.id">…</span>
+            <span v-else-if="cardsInLevel(lvl.id) > 0">compléter</span>
+            <span v-else>importer</span>
+          </Button>
         </div>
-        <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-800">
-          <div
-            class="h-full transition-[width]"
-            :class="lvl.color"
-            :style="{ width: progress[lvl.id] + '%' }"
-          />
+        <div class="mt-3">
+          <Progress :value="progress[lvl.id]" />
         </div>
-      </article>
-    </div>
+      </li>
+    </ul>
 
-    <p class="mt-2 text-center text-xs text-slate-500">
+    <p class="text-center text-[11px] italic text-muted-foreground/70">
       Source : HSK 2.0 officiel (2012) via
-      <a class="underline" href="https://github.com/glxxyz/hskhsk.com" target="_blank" rel="noopener">hskhsk.com</a>
+      <a class="underline underline-offset-4" href="https://github.com/glxxyz/hskhsk.com" target="_blank" rel="noopener">hskhsk.com</a>
     </p>
   </section>
 </template>
