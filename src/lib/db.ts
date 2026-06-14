@@ -92,6 +92,32 @@ export interface UserText {
   lastReadAt?: number;
 }
 
+export interface GrammarProgress {
+  itemId: string;
+  level: number;
+  due: number;
+  stability: number;
+  difficulty: number;
+  elapsed_days: number;
+  scheduled_days: number;
+  reps: number;
+  lapses: number;
+  state: 0 | 1 | 2 | 3;
+  last_review: number | null;
+  createdAt: number;
+}
+
+export interface GrammarLog {
+  id?: number;
+  itemId: string;
+  rating: 1 | 2 | 3 | 4;
+  reviewedAt: number;
+  elapsed_days: number;
+  stability: number;
+  difficulty: number;
+  wasNew: boolean;
+}
+
 export interface Meta {
   key: string;
   value: string | number | boolean;
@@ -105,6 +131,8 @@ class ChineseDB extends Dexie {
   sentenceCards!: Table<SentenceCard, string>;
   sentenceLogs!: Table<SentenceLog, number>;
   userTexts!: Table<UserText, string>;
+  grammarProgress!: Table<GrammarProgress, string>;
+  grammarLogs!: Table<GrammarLog, number>;
   meta!: Table<Meta, string>;
 
   constructor() {
@@ -154,6 +182,18 @@ class ChineseDB extends Dexie {
       sentenceCards: 'zh, due, state, createdAt',
       sentenceLogs: '++id, zh, reviewedAt',
       userTexts: 'id, createdAt, lastReadAt',
+      meta: 'key',
+    });
+    this.version(6).stores({
+      dict: '++id, simplified, pinyinPlain',
+      cards: 'id, simplified, due, state, createdAt, *tags',
+      reviews: '++id, cardId, reviewedAt',
+      sentenceReviews: '++id, zh, reviewedAt',
+      sentenceCards: 'zh, due, state, createdAt',
+      sentenceLogs: '++id, zh, reviewedAt',
+      userTexts: 'id, createdAt, lastReadAt',
+      grammarProgress: 'itemId, level, due, state, createdAt',
+      grammarLogs: '++id, itemId, reviewedAt',
       meta: 'key',
     });
   }

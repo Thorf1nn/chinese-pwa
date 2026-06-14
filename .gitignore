@@ -19,3 +19,4 @@ scripts/cmn_sentences.tsv*
 scripts/fra_sentences.tsv*
 scripts/cmn-fra_links.tsv*
 scripts/links.csv
+.claude/

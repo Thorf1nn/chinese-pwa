@@ -1,0 +1,3824 @@
+[
+  {
+    "id": "w001",
+    "type": "vocab",
+    "level": 1,
+    "order": 100,
+    "hanzi": "我",
+    "pinyin": "wǒ",
+    "meaning": "je; moi",
+    "tags": [
+      "pronom"
+    ]
+  },
+  {
+    "id": "w002",
+    "type": "vocab",
+    "level": 1,
+    "order": 110,
+    "hanzi": "你",
+    "pinyin": "nǐ",
+    "meaning": "tu; toi",
+    "tags": [
+      "pronom"
+    ]
+  },
+  {
+    "id": "w003",
+    "type": "vocab",
+    "level": 1,
+    "order": 120,
+    "hanzi": "他",
+    "pinyin": "tā",
+    "meaning": "il; lui",
+    "tags": [
+      "pronom"
+    ]
+  },
+  {
+    "id": "w004",
+    "type": "vocab",
+    "level": 1,
+    "order": 130,
+    "hanzi": "她",
+    "pinyin": "tā",
+    "meaning": "elle",
+    "tags": [
+      "pronom"
+    ]
+  },
+  {
+    "id": "w005",
+    "type": "vocab",
+    "level": 1,
+    "order": 140,
+    "hanzi": "们",
+    "pinyin": "men",
+    "meaning": "(pluriel)",
+    "tags": [
+      "suffixe"
+    ]
+  },
+  {
+    "id": "w006",
+    "type": "vocab",
+    "level": 1,
+    "order": 150,
+    "hanzi": "是",
+    "pinyin": "shì",
+    "meaning": "être",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w007",
+    "type": "vocab",
+    "level": 1,
+    "order": 160,
+    "hanzi": "不",
+    "pinyin": "bù",
+    "meaning": "ne...pas",
+    "tags": [
+      "adverbe"
+    ]
+  },
+  {
+    "id": "w008",
+    "type": "vocab",
+    "level": 1,
+    "order": 170,
+    "hanzi": "的",
+    "pinyin": "de",
+    "meaning": "(particule possessive)",
+    "tags": [
+      "particule"
+    ]
+  },
+  {
+    "id": "w009",
+    "type": "vocab",
+    "level": 1,
+    "order": 180,
+    "hanzi": "有",
+    "pinyin": "yǒu",
+    "meaning": "avoir; il y a",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w010",
+    "type": "vocab",
+    "level": 1,
+    "order": 190,
+    "hanzi": "好",
+    "pinyin": "hǎo",
+    "meaning": "bon; bien",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "g-hsk1-01-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 200,
+    "grammarId": "g-hsk1-01",
+    "grammarTitle": "L'ordre des mots de base",
+    "grammarStructure": "Sujet + Verbe + Objet",
+    "grammarExplanation": "En chinois, la structure simple est identique au français.",
+    "sentence": "我爱爸爸。",
+    "pinyin": "Wǒ ài bàba.",
+    "translation": "J'aime papa.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-01-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 210,
+    "grammarId": "g-hsk1-01",
+    "grammarTitle": "L'ordre des mots de base",
+    "grammarStructure": "Sujet + Verbe + Objet",
+    "grammarExplanation": "En chinois, la structure simple est identique au français.",
+    "sentence": "她喝水。",
+    "pinyin": "Tā hē shuǐ.",
+    "translation": "Elle boit de l'eau.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-01-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 220,
+    "grammarId": "g-hsk1-01",
+    "grammarTitle": "L'ordre des mots de base",
+    "grammarStructure": "Sujet + Verbe + Objet",
+    "grammarExplanation": "En chinois, la structure simple est identique au français.",
+    "sentence": "我们吃饭。",
+    "pinyin": "Wǒmen chīfàn.",
+    "translation": "Nous mangeons.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w011",
+    "type": "vocab",
+    "level": 1,
+    "order": 230,
+    "hanzi": "人",
+    "pinyin": "rén",
+    "meaning": "personne; gens",
+    "tags": [
+      "nom"
+    ]
+  },
+  {
+    "id": "w012",
+    "type": "vocab",
+    "level": 1,
+    "order": 240,
+    "hanzi": "中国",
+    "pinyin": "Zhōngguó",
+    "meaning": "Chine",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w013",
+    "type": "vocab",
+    "level": 1,
+    "order": 250,
+    "hanzi": "中文",
+    "pinyin": "Zhōngwén",
+    "meaning": "langue chinoise",
+    "tags": [
+      "langue"
+    ]
+  },
+  {
+    "id": "w014",
+    "type": "vocab",
+    "level": 1,
+    "order": 260,
+    "hanzi": "汉语",
+    "pinyin": "Hànyǔ",
+    "meaning": "mandarin",
+    "tags": [
+      "langue"
+    ]
+  },
+  {
+    "id": "w015",
+    "type": "vocab",
+    "level": 1,
+    "order": 270,
+    "hanzi": "说",
+    "pinyin": "shuō",
+    "meaning": "dire; parler",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w016",
+    "type": "vocab",
+    "level": 1,
+    "order": 280,
+    "hanzi": "什么",
+    "pinyin": "shénme",
+    "meaning": "quoi; quel",
+    "tags": [
+      "question"
+    ]
+  },
+  {
+    "id": "w017",
+    "type": "vocab",
+    "level": 1,
+    "order": 290,
+    "hanzi": "吗",
+    "pinyin": "ma",
+    "meaning": "(particule interrogative)",
+    "tags": [
+      "particule"
+    ]
+  },
+  {
+    "id": "w018",
+    "type": "vocab",
+    "level": 1,
+    "order": 300,
+    "hanzi": "呢",
+    "pinyin": "ne",
+    "meaning": "(particule question et toi ?)",
+    "tags": [
+      "particule"
+    ]
+  },
+  {
+    "id": "w019",
+    "type": "vocab",
+    "level": 1,
+    "order": 310,
+    "hanzi": "叫",
+    "pinyin": "jiào",
+    "meaning": "s'appeler; appeler",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w020",
+    "type": "vocab",
+    "level": 1,
+    "order": 320,
+    "hanzi": "名字",
+    "pinyin": "míngzi",
+    "meaning": "prénom; nom",
+    "tags": [
+      "nom"
+    ]
+  },
+  {
+    "id": "g-hsk1-02-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 330,
+    "grammarId": "g-hsk1-02",
+    "grammarTitle": "La question avec 吗 (ma)",
+    "grammarStructure": "Phrase Affirmative + 吗 ?",
+    "grammarExplanation": "Pour poser une question fermée (oui/non), on ajoute 'ma' à la fin.",
+    "sentence": "你是老师吗？",
+    "pinyin": "Nǐ shì lǎoshī ma?",
+    "translation": "Es-tu professeur ?",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-02-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 340,
+    "grammarId": "g-hsk1-02",
+    "grammarTitle": "La question avec 吗 (ma)",
+    "grammarStructure": "Phrase Affirmative + 吗 ?",
+    "grammarExplanation": "Pour poser une question fermée (oui/non), on ajoute 'ma' à la fin.",
+    "sentence": "你好吗？",
+    "pinyin": "Nǐ hǎo ma?",
+    "translation": "Comment vas-tu ?",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-02-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 350,
+    "grammarId": "g-hsk1-02",
+    "grammarTitle": "La question avec 吗 (ma)",
+    "grammarStructure": "Phrase Affirmative + 吗 ?",
+    "grammarExplanation": "Pour poser une question fermée (oui/non), on ajoute 'ma' à la fin.",
+    "sentence": "他是学生吗？",
+    "pinyin": "Tā shì xuésheng ma?",
+    "translation": "Est-il étudiant ?",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w021",
+    "type": "vocab",
+    "level": 1,
+    "order": 360,
+    "hanzi": "老师",
+    "pinyin": "lǎoshī",
+    "meaning": "professeur",
+    "tags": [
+      "personne"
+    ]
+  },
+  {
+    "id": "w022",
+    "type": "vocab",
+    "level": 1,
+    "order": 370,
+    "hanzi": "学生",
+    "pinyin": "xuéshēng",
+    "meaning": "étudiant; élève",
+    "tags": [
+      "personne"
+    ]
+  },
+  {
+    "id": "w023",
+    "type": "vocab",
+    "level": 1,
+    "order": 380,
+    "hanzi": "朋友",
+    "pinyin": "péngyou",
+    "meaning": "ami",
+    "tags": [
+      "personne"
+    ]
+  },
+  {
+    "id": "w024",
+    "type": "vocab",
+    "level": 1,
+    "order": 390,
+    "hanzi": "爸爸",
+    "pinyin": "bàba",
+    "meaning": "papa",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "w025",
+    "type": "vocab",
+    "level": 1,
+    "order": 400,
+    "hanzi": "妈妈",
+    "pinyin": "māma",
+    "meaning": "maman",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "w026",
+    "type": "vocab",
+    "level": 1,
+    "order": 410,
+    "hanzi": "哥哥",
+    "pinyin": "gēge",
+    "meaning": "grand frère",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "w027",
+    "type": "vocab",
+    "level": 1,
+    "order": 420,
+    "hanzi": "姐姐",
+    "pinyin": "jiějie",
+    "meaning": "grande sœur",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "w028",
+    "type": "vocab",
+    "level": 1,
+    "order": 430,
+    "hanzi": "弟弟",
+    "pinyin": "dìdi",
+    "meaning": "petit frère",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "g-hsk1-03-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 440,
+    "grammarId": "g-hsk1-03",
+    "grammarTitle": "La possession avec 的 (de)",
+    "grammarStructure": "Possesseur + 的 + Objet",
+    "grammarExplanation": "La particule 'de' indique le lien de possession.",
+    "sentence": "我的书。",
+    "pinyin": "Wǒ de shū.",
+    "translation": "Mon livre.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-03-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 450,
+    "grammarId": "g-hsk1-03",
+    "grammarTitle": "La possession avec 的 (de)",
+    "grammarStructure": "Possesseur + 的 + Objet",
+    "grammarExplanation": "La particule 'de' indique le lien de possession.",
+    "sentence": "她的猫很小。",
+    "pinyin": "Tā de māo hěn xiǎo.",
+    "translation": "Son chat est très petit.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-03-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 460,
+    "grammarId": "g-hsk1-03",
+    "grammarTitle": "La possession avec 的 (de)",
+    "grammarStructure": "Possesseur + 的 + Objet",
+    "grammarExplanation": "La particule 'de' indique le lien de possession.",
+    "sentence": "这是他的电脑。",
+    "pinyin": "Zhè shì tā de diànnǎo.",
+    "translation": "C'est son ordinateur.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w029",
+    "type": "vocab",
+    "level": 1,
+    "order": 470,
+    "hanzi": "妹妹",
+    "pinyin": "mèimei",
+    "meaning": "petite sœur",
+    "tags": [
+      "famille"
+    ]
+  },
+  {
+    "id": "w030",
+    "type": "vocab",
+    "level": 1,
+    "order": 480,
+    "hanzi": "家",
+    "pinyin": "jiā",
+    "meaning": "maison; famille",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w031",
+    "type": "vocab",
+    "level": 1,
+    "order": 490,
+    "hanzi": "在",
+    "pinyin": "zài",
+    "meaning": "être à; se trouver",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w032",
+    "type": "vocab",
+    "level": 1,
+    "order": 500,
+    "hanzi": "这",
+    "pinyin": "zhè",
+    "meaning": "ce; ceci",
+    "tags": [
+      "déterminant"
+    ]
+  },
+  {
+    "id": "w033",
+    "type": "vocab",
+    "level": 1,
+    "order": 510,
+    "hanzi": "那",
+    "pinyin": "nà",
+    "meaning": "ce...là; cela",
+    "tags": [
+      "déterminant"
+    ]
+  },
+  {
+    "id": "w034",
+    "type": "vocab",
+    "level": 1,
+    "order": 520,
+    "hanzi": "哪",
+    "pinyin": "nǎ",
+    "meaning": "quel; lequel",
+    "tags": [
+      "question"
+    ]
+  },
+  {
+    "id": "w035",
+    "type": "vocab",
+    "level": 1,
+    "order": 530,
+    "hanzi": "哪儿",
+    "pinyin": "nǎr",
+    "meaning": "où",
+    "tags": [
+      "question"
+    ]
+  },
+  {
+    "id": "w036",
+    "type": "vocab",
+    "level": 1,
+    "order": 540,
+    "hanzi": "这儿",
+    "pinyin": "zhèr",
+    "meaning": "ici",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "g-hsk1-04-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 550,
+    "grammarId": "g-hsk1-04",
+    "grammarTitle": "La négation avec 不 (bù)",
+    "grammarStructure": "不 + Verbe / Adjectif",
+    "grammarExplanation": "On place 'bu' devant le verbe pour nier une action présente ou future.",
+    "sentence": "我不去学校。",
+    "pinyin": "Wǒ bù qù xuéxiào.",
+    "translation": "Je ne vais pas à l'école.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-04-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 560,
+    "grammarId": "g-hsk1-04",
+    "grammarTitle": "La négation avec 不 (bù)",
+    "grammarStructure": "不 + Verbe / Adjectif",
+    "grammarExplanation": "On place 'bu' devant le verbe pour nier une action présente ou future.",
+    "sentence": "他不喝茶。",
+    "pinyin": "Tā bù hē chá.",
+    "translation": "Il ne boit pas de thé.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-04-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 570,
+    "grammarId": "g-hsk1-04",
+    "grammarTitle": "La négation avec 不 (bù)",
+    "grammarStructure": "不 + Verbe / Adjectif",
+    "grammarExplanation": "On place 'bu' devant le verbe pour nier une action présente ou future.",
+    "sentence": "我不是老师。",
+    "pinyin": "Wǒ bú shì lǎoshī.",
+    "translation": "Je ne suis pas professeur.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w037",
+    "type": "vocab",
+    "level": 1,
+    "order": 580,
+    "hanzi": "那儿",
+    "pinyin": "nàr",
+    "meaning": "là-bas",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w038",
+    "type": "vocab",
+    "level": 1,
+    "order": 590,
+    "hanzi": "一",
+    "pinyin": "yī",
+    "meaning": "un; 1",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w039",
+    "type": "vocab",
+    "level": 1,
+    "order": 600,
+    "hanzi": "二",
+    "pinyin": "èr",
+    "meaning": "deux; 2",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w040",
+    "type": "vocab",
+    "level": 1,
+    "order": 610,
+    "hanzi": "三",
+    "pinyin": "sān",
+    "meaning": "trois; 3",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w041",
+    "type": "vocab",
+    "level": 1,
+    "order": 620,
+    "hanzi": "四",
+    "pinyin": "sì",
+    "meaning": "quatre; 4",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w042",
+    "type": "vocab",
+    "level": 1,
+    "order": 630,
+    "hanzi": "五",
+    "pinyin": "wǔ",
+    "meaning": "cinq; 5",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w043",
+    "type": "vocab",
+    "level": 1,
+    "order": 640,
+    "hanzi": "六",
+    "pinyin": "liù",
+    "meaning": "six; 6",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w044",
+    "type": "vocab",
+    "level": 1,
+    "order": 650,
+    "hanzi": "七",
+    "pinyin": "qī",
+    "meaning": "sept; 7",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "g-hsk1-05-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 660,
+    "grammarId": "g-hsk1-05",
+    "grammarTitle": "Exprimer la capacité (savoir faire)",
+    "grammarStructure": "Sujet + 会 + Verbe",
+    "grammarExplanation": "会 (huì) indique une compétence apprise.",
+    "sentence": "我会说汉语。",
+    "pinyin": "Wǒ huì shuō Hànyǔ.",
+    "translation": "Je sais parler chinois.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-05-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 670,
+    "grammarId": "g-hsk1-05",
+    "grammarTitle": "Exprimer la capacité (savoir faire)",
+    "grammarStructure": "Sujet + 会 + Verbe",
+    "grammarExplanation": "会 (huì) indique une compétence apprise.",
+    "sentence": "她会写汉字。",
+    "pinyin": "Tā huì xiě hànzì.",
+    "translation": "Elle sait écrire les caractères chinois.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-05-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 680,
+    "grammarId": "g-hsk1-05",
+    "grammarTitle": "Exprimer la capacité (savoir faire)",
+    "grammarStructure": "Sujet + 会 + Verbe",
+    "grammarExplanation": "会 (huì) indique une compétence apprise.",
+    "sentence": "你会做饭吗？",
+    "pinyin": "Nǐ huì zuòfàn ma?",
+    "translation": "Sais-tu cuisiner ?",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w045",
+    "type": "vocab",
+    "level": 1,
+    "order": 690,
+    "hanzi": "八",
+    "pinyin": "bā",
+    "meaning": "huit; 8",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w046",
+    "type": "vocab",
+    "level": 1,
+    "order": 700,
+    "hanzi": "九",
+    "pinyin": "jiǔ",
+    "meaning": "neuf; 9",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w047",
+    "type": "vocab",
+    "level": 1,
+    "order": 710,
+    "hanzi": "十",
+    "pinyin": "shí",
+    "meaning": "dix; 10",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w048",
+    "type": "vocab",
+    "level": 1,
+    "order": 720,
+    "hanzi": "百",
+    "pinyin": "bǎi",
+    "meaning": "cent; 100",
+    "tags": [
+      "nombre"
+    ]
+  },
+  {
+    "id": "w049",
+    "type": "vocab",
+    "level": 1,
+    "order": 730,
+    "hanzi": "个",
+    "pinyin": "gè",
+    "meaning": "(spécificatif général)",
+    "tags": [
+      "spécificatif"
+    ]
+  },
+  {
+    "id": "w050",
+    "type": "vocab",
+    "level": 1,
+    "order": 740,
+    "hanzi": "多少",
+    "pinyin": "duōshǎo",
+    "meaning": "combien",
+    "tags": [
+      "question"
+    ]
+  },
+  {
+    "id": "w051",
+    "type": "vocab",
+    "level": 1,
+    "order": 750,
+    "hanzi": "钱",
+    "pinyin": "qián",
+    "meaning": "argent; yuans",
+    "tags": [
+      "nom"
+    ]
+  },
+  {
+    "id": "w052",
+    "type": "vocab",
+    "level": 1,
+    "order": 760,
+    "hanzi": "块",
+    "pinyin": "kuài",
+    "meaning": "yuan (monnaie)",
+    "tags": [
+      "mesure"
+    ]
+  },
+  {
+    "id": "w053",
+    "type": "vocab",
+    "level": 1,
+    "order": 770,
+    "hanzi": "今天",
+    "pinyin": "jīntiān",
+    "meaning": "aujourd'hui",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w054",
+    "type": "vocab",
+    "level": 1,
+    "order": 780,
+    "hanzi": "明天",
+    "pinyin": "míngtiān",
+    "meaning": "demain",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w055",
+    "type": "vocab",
+    "level": 1,
+    "order": 790,
+    "hanzi": "昨天",
+    "pinyin": "zuótiān",
+    "meaning": "hier",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "g-hsk1-06-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 800,
+    "grammarId": "g-hsk1-06",
+    "grammarTitle": "Les mots interrogatifs",
+    "grammarStructure": "Sujet + Verbe + [Mots Interrogatifs]",
+    "grammarExplanation": "En chinois, on ne déplace pas le mot interrogatif au début. Il reste à la place de la réponse.",
+    "sentence": "他是谁？",
+    "pinyin": "Tā shì shéi?",
+    "translation": "Qui est-il ?",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-06-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 810,
+    "grammarId": "g-hsk1-06",
+    "grammarTitle": "Les mots interrogatifs",
+    "grammarStructure": "Sujet + Verbe + [Mots Interrogatifs]",
+    "grammarExplanation": "En chinois, on ne déplace pas le mot interrogatif au début. Il reste à la place de la réponse.",
+    "sentence": "这是什么？",
+    "pinyin": "Zhè shì shénme?",
+    "translation": "Qu'est-ce que c'est ?",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-06-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 820,
+    "grammarId": "g-hsk1-06",
+    "grammarTitle": "Les mots interrogatifs",
+    "grammarStructure": "Sujet + Verbe + [Mots Interrogatifs]",
+    "grammarExplanation": "En chinois, on ne déplace pas le mot interrogatif au début. Il reste à la place de la réponse.",
+    "sentence": "你在哪儿？",
+    "pinyin": "Nǐ zài nǎr?",
+    "translation": "Où es-tu ?",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w056",
+    "type": "vocab",
+    "level": 1,
+    "order": 830,
+    "hanzi": "现在",
+    "pinyin": "xiànzài",
+    "meaning": "maintenant",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w057",
+    "type": "vocab",
+    "level": 1,
+    "order": 840,
+    "hanzi": "年",
+    "pinyin": "nián",
+    "meaning": "an; année",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w058",
+    "type": "vocab",
+    "level": 1,
+    "order": 850,
+    "hanzi": "月",
+    "pinyin": "yuè",
+    "meaning": "mois; lune",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w059",
+    "type": "vocab",
+    "level": 1,
+    "order": 860,
+    "hanzi": "日",
+    "pinyin": "rì",
+    "meaning": "jour; soleil",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w060",
+    "type": "vocab",
+    "level": 1,
+    "order": 870,
+    "hanzi": "号",
+    "pinyin": "hào",
+    "meaning": "numéro; date",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w061",
+    "type": "vocab",
+    "level": 1,
+    "order": 880,
+    "hanzi": "星期",
+    "pinyin": "xīngqī",
+    "meaning": "semaine; jour de la semaine",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w062",
+    "type": "vocab",
+    "level": 1,
+    "order": 890,
+    "hanzi": "点",
+    "pinyin": "diǎn",
+    "meaning": "heure (ex: 3点)",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w063",
+    "type": "vocab",
+    "level": 1,
+    "order": 900,
+    "hanzi": "分",
+    "pinyin": "fēn",
+    "meaning": "minute; centime",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w064",
+    "type": "vocab",
+    "level": 1,
+    "order": 910,
+    "hanzi": "上午",
+    "pinyin": "shàngwǔ",
+    "meaning": "matin (avant midi)",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w065",
+    "type": "vocab",
+    "level": 1,
+    "order": 920,
+    "hanzi": "下午",
+    "pinyin": "xiàwǔ",
+    "meaning": "après-midi",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "g-hsk1-07-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 930,
+    "grammarId": "g-hsk1-07",
+    "grammarTitle": "Combien : 几 (jǐ) vs 多少 (duōshao)",
+    "grammarStructure": "几 + Spécificatif / 多少",
+    "grammarExplanation": "几 est utilisé pour les petits nombres (<10), 多少 pour les grands nombres ou prix.",
+    "sentence": "你有几个苹果？",
+    "pinyin": "Nǐ yǒu jǐ gè píngguǒ?",
+    "translation": "Combien de pommes as-tu (quelques-unes) ?",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-07-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 940,
+    "grammarId": "g-hsk1-07",
+    "grammarTitle": "Combien : 几 (jǐ) vs 多少 (duōshao)",
+    "grammarStructure": "几 + Spécificatif / 多少",
+    "grammarExplanation": "几 est utilisé pour les petits nombres (<10), 多少 pour les grands nombres ou prix.",
+    "sentence": "学校有多少学生？",
+    "pinyin": "Xuéxiào yǒu duōshao xuésheng?",
+    "translation": "Combien d'élèves y a-t-il à l'école ?",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-07-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 950,
+    "grammarId": "g-hsk1-07",
+    "grammarTitle": "Combien : 几 (jǐ) vs 多少 (duōshao)",
+    "grammarStructure": "几 + Spécificatif / 多少",
+    "grammarExplanation": "几 est utilisé pour les petits nombres (<10), 多少 pour les grands nombres ou prix.",
+    "sentence": "你有几本书？",
+    "pinyin": "Nǐ yǒu jǐ běn shū?",
+    "translation": "Combien de livres as-tu ?",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w066",
+    "type": "vocab",
+    "level": 1,
+    "order": 960,
+    "hanzi": "中午",
+    "pinyin": "zhōngwǔ",
+    "meaning": "midi",
+    "tags": [
+      "temps"
+    ]
+  },
+  {
+    "id": "w067",
+    "type": "vocab",
+    "level": 1,
+    "order": 970,
+    "hanzi": "吃",
+    "pinyin": "chī",
+    "meaning": "manger",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w068",
+    "type": "vocab",
+    "level": 1,
+    "order": 980,
+    "hanzi": "喝",
+    "pinyin": "hē",
+    "meaning": "boire",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w069",
+    "type": "vocab",
+    "level": 1,
+    "order": 990,
+    "hanzi": "买",
+    "pinyin": "mǎi",
+    "meaning": "acheter",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w070",
+    "type": "vocab",
+    "level": 1,
+    "order": 1000,
+    "hanzi": "看",
+    "pinyin": "kàn",
+    "meaning": "regarder; lire",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w071",
+    "type": "vocab",
+    "level": 1,
+    "order": 1010,
+    "hanzi": "听",
+    "pinyin": "tīng",
+    "meaning": "écouter",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w072",
+    "type": "vocab",
+    "level": 1,
+    "order": 1020,
+    "hanzi": "写",
+    "pinyin": "xiě",
+    "meaning": "écrire",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w073",
+    "type": "vocab",
+    "level": 1,
+    "order": 1030,
+    "hanzi": "读",
+    "pinyin": "dú",
+    "meaning": "lire à voix haute; étudier",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w074",
+    "type": "vocab",
+    "level": 1,
+    "order": 1040,
+    "hanzi": "去",
+    "pinyin": "qù",
+    "meaning": "aller",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w075",
+    "type": "vocab",
+    "level": 1,
+    "order": 1050,
+    "hanzi": "来",
+    "pinyin": "lái",
+    "meaning": "venir",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "g-hsk1-08-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 1060,
+    "grammarId": "g-hsk1-08",
+    "grammarTitle": "La négation de 'Avoir' (有)",
+    "grammarStructure": "没有 + Objet",
+    "grammarExplanation": "Attention : on ne dit JAMAIS 'bù yǒu'. La seule négation pour 'yǒu' est 'méi'.",
+    "sentence": "我没有钱。",
+    "pinyin": "Wǒ méiyǒu qián.",
+    "translation": "Je n'ai pas d'argent.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-08-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 1070,
+    "grammarId": "g-hsk1-08",
+    "grammarTitle": "La négation de 'Avoir' (有)",
+    "grammarStructure": "没有 + Objet",
+    "grammarExplanation": "Attention : on ne dit JAMAIS 'bù yǒu'. La seule négation pour 'yǒu' est 'méi'.",
+    "sentence": "她没有猫。",
+    "pinyin": "Tā méiyǒu māo.",
+    "translation": "Elle n'a pas de chat.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-08-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 1080,
+    "grammarId": "g-hsk1-08",
+    "grammarTitle": "La négation de 'Avoir' (有)",
+    "grammarStructure": "没有 + Objet",
+    "grammarExplanation": "Attention : on ne dit JAMAIS 'bù yǒu'. La seule négation pour 'yǒu' est 'méi'.",
+    "sentence": "我们没有时间。",
+    "pinyin": "Wǒmen méiyǒu shíjiān.",
+    "translation": "Nous n'avons pas le temps.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w076",
+    "type": "vocab",
+    "level": 1,
+    "order": 1090,
+    "hanzi": "回",
+    "pinyin": "huí",
+    "meaning": "retourner; revenir",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w077",
+    "type": "vocab",
+    "level": 1,
+    "order": 1100,
+    "hanzi": "住",
+    "pinyin": "zhù",
+    "meaning": "habiter; résider",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w078",
+    "type": "vocab",
+    "level": 1,
+    "order": 1110,
+    "hanzi": "坐",
+    "pinyin": "zuò",
+    "meaning": "s'asseoir; prendre (transport)",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w079",
+    "type": "vocab",
+    "level": 1,
+    "order": 1120,
+    "hanzi": "开",
+    "pinyin": "kāi",
+    "meaning": "ouvrir; conduire",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w080",
+    "type": "vocab",
+    "level": 1,
+    "order": 1130,
+    "hanzi": "打",
+    "pinyin": "dǎ",
+    "meaning": "frapper; jouer (sport); passer (appel)",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w081",
+    "type": "vocab",
+    "level": 1,
+    "order": 1140,
+    "hanzi": "很",
+    "pinyin": "hěn",
+    "meaning": "très",
+    "tags": [
+      "adverbe"
+    ]
+  },
+  {
+    "id": "w082",
+    "type": "vocab",
+    "level": 1,
+    "order": 1150,
+    "hanzi": "也",
+    "pinyin": "yě",
+    "meaning": "aussi; également",
+    "tags": [
+      "adverbe"
+    ]
+  },
+  {
+    "id": "w083",
+    "type": "vocab",
+    "level": 1,
+    "order": 1160,
+    "hanzi": "都",
+    "pinyin": "dōu",
+    "meaning": "tous; tout",
+    "tags": [
+      "adverbe"
+    ]
+  },
+  {
+    "id": "w084",
+    "type": "vocab",
+    "level": 1,
+    "order": 1170,
+    "hanzi": "太",
+    "pinyin": "tài",
+    "meaning": "trop; tellement",
+    "tags": [
+      "adverbe"
+    ]
+  },
+  {
+    "id": "w085",
+    "type": "vocab",
+    "level": 1,
+    "order": 1180,
+    "hanzi": "了",
+    "pinyin": "le",
+    "meaning": "(aspect accompli)",
+    "tags": [
+      "particule"
+    ]
+  },
+  {
+    "id": "w086",
+    "type": "vocab",
+    "level": 1,
+    "order": 1190,
+    "hanzi": "喜欢",
+    "pinyin": "xǐhuān",
+    "meaning": "aimer; apprécier",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w087",
+    "type": "vocab",
+    "level": 1,
+    "order": 1200,
+    "hanzi": "想",
+    "pinyin": "xiǎng",
+    "meaning": "vouloir; penser",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w088",
+    "type": "vocab",
+    "level": 1,
+    "order": 1210,
+    "hanzi": "能",
+    "pinyin": "néng",
+    "meaning": "pouvoir (capacité)",
+    "tags": [
+      "modal"
+    ]
+  },
+  {
+    "id": "w089",
+    "type": "vocab",
+    "level": 1,
+    "order": 1220,
+    "hanzi": "会",
+    "pinyin": "huì",
+    "meaning": "savoir faire; pouvoir",
+    "tags": [
+      "modal"
+    ]
+  },
+  {
+    "id": "w090",
+    "type": "vocab",
+    "level": 1,
+    "order": 1230,
+    "hanzi": "可以",
+    "pinyin": "kěyǐ",
+    "meaning": "pouvoir (permission)",
+    "tags": [
+      "modal"
+    ]
+  },
+  {
+    "id": "g-hsk1-09-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 1240,
+    "grammarId": "g-hsk1-09",
+    "grammarTitle": "L'ordre du temps",
+    "grammarStructure": "Année + Mois + Jour + Moment + Heure",
+    "grammarExplanation": "On va toujours du plus grand au plus petit.",
+    "sentence": "今天上午十点。",
+    "pinyin": "Jīntiān shàngwǔ shí diǎn.",
+    "translation": "Aujourd'hui à 10h du matin.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-09-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 1250,
+    "grammarId": "g-hsk1-09",
+    "grammarTitle": "L'ordre du temps",
+    "grammarStructure": "Année + Mois + Jour + Moment + Heure",
+    "grammarExplanation": "On va toujours du plus grand au plus petit.",
+    "sentence": "明天下午三点。",
+    "pinyin": "Míngtiān xiàwǔ sān diǎn.",
+    "translation": "Demain à 15h.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-09-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 1260,
+    "grammarId": "g-hsk1-09",
+    "grammarTitle": "L'ordre du temps",
+    "grammarStructure": "Année + Mois + Jour + Moment + Heure",
+    "grammarExplanation": "On va toujours du plus grand au plus petit.",
+    "sentence": "星期六上午九点半。",
+    "pinyin": "Xīngqīliù shàngwǔ jiǔ diǎn bàn.",
+    "translation": "Samedi à 9h30 du matin.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w091",
+    "type": "vocab",
+    "level": 1,
+    "order": 1270,
+    "hanzi": "要",
+    "pinyin": "yào",
+    "meaning": "vouloir; avoir besoin de",
+    "tags": [
+      "modal"
+    ]
+  },
+  {
+    "id": "w092",
+    "type": "vocab",
+    "level": 1,
+    "order": 1280,
+    "hanzi": "学习",
+    "pinyin": "xuéxí",
+    "meaning": "étudier; apprendre",
+    "tags": [
+      "verbe"
+    ]
+  },
+  {
+    "id": "w093",
+    "type": "vocab",
+    "level": 1,
+    "order": 1290,
+    "hanzi": "工作",
+    "pinyin": "gōngzuò",
+    "meaning": "travail; travailler",
+    "tags": [
+      "verbe",
+      "nom"
+    ]
+  },
+  {
+    "id": "w094",
+    "type": "vocab",
+    "level": 1,
+    "order": 1300,
+    "hanzi": "学校",
+    "pinyin": "xuéxiào",
+    "meaning": "école",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w095",
+    "type": "vocab",
+    "level": 1,
+    "order": 1310,
+    "hanzi": "医院",
+    "pinyin": "yīyuàn",
+    "meaning": "hôpital",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w096",
+    "type": "vocab",
+    "level": 1,
+    "order": 1320,
+    "hanzi": "医生",
+    "pinyin": "yīshēng",
+    "meaning": "médecin",
+    "tags": [
+      "personne"
+    ]
+  },
+  {
+    "id": "w097",
+    "type": "vocab",
+    "level": 1,
+    "order": 1330,
+    "hanzi": "商店",
+    "pinyin": "shāngdiàn",
+    "meaning": "magasin; boutique",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w098",
+    "type": "vocab",
+    "level": 1,
+    "order": 1340,
+    "hanzi": "饭店",
+    "pinyin": "fàndiàn",
+    "meaning": "restaurant; hôtel",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w099",
+    "type": "vocab",
+    "level": 1,
+    "order": 1350,
+    "hanzi": "火车站",
+    "pinyin": "huǒchēzhàn",
+    "meaning": "gare",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w100",
+    "type": "vocab",
+    "level": 1,
+    "order": 1360,
+    "hanzi": "飞机",
+    "pinyin": "fēijī",
+    "meaning": "avion",
+    "tags": [
+      "transport"
+    ]
+  },
+  {
+    "id": "w101",
+    "type": "vocab",
+    "level": 1,
+    "order": 1370,
+    "hanzi": "出租车",
+    "pinyin": "chūzūchē",
+    "meaning": "taxi",
+    "tags": [
+      "transport"
+    ]
+  },
+  {
+    "id": "w102",
+    "type": "vocab",
+    "level": 1,
+    "order": 1380,
+    "hanzi": "公共汽车",
+    "pinyin": "gōnggòng qìchē",
+    "meaning": "bus",
+    "tags": [
+      "transport"
+    ]
+  },
+  {
+    "id": "w103",
+    "type": "vocab",
+    "level": 1,
+    "order": 1390,
+    "hanzi": "水",
+    "pinyin": "shuǐ",
+    "meaning": "eau",
+    "tags": [
+      "boisson"
+    ]
+  },
+  {
+    "id": "w104",
+    "type": "vocab",
+    "level": 1,
+    "order": 1400,
+    "hanzi": "茶",
+    "pinyin": "chá",
+    "meaning": "thé",
+    "tags": [
+      "boisson"
+    ]
+  },
+  {
+    "id": "w105",
+    "type": "vocab",
+    "level": 1,
+    "order": 1410,
+    "hanzi": "米饭",
+    "pinyin": "mǐfàn",
+    "meaning": "riz cuit",
+    "tags": [
+      "nourriture"
+    ]
+  },
+  {
+    "id": "w106",
+    "type": "vocab",
+    "level": 1,
+    "order": 1420,
+    "hanzi": "菜",
+    "pinyin": "cài",
+    "meaning": "légume; plat; mets",
+    "tags": [
+      "nourriture"
+    ]
+  },
+  {
+    "id": "w107",
+    "type": "vocab",
+    "level": 1,
+    "order": 1430,
+    "hanzi": "水果",
+    "pinyin": "shuǐguǒ",
+    "meaning": "fruit",
+    "tags": [
+      "nourriture"
+    ]
+  },
+  {
+    "id": "w108",
+    "type": "vocab",
+    "level": 1,
+    "order": 1440,
+    "hanzi": "苹果",
+    "pinyin": "píngguǒ",
+    "meaning": "pomme",
+    "tags": [
+      "nourriture"
+    ]
+  },
+  {
+    "id": "w109",
+    "type": "vocab",
+    "level": 1,
+    "order": 1450,
+    "hanzi": "大",
+    "pinyin": "dà",
+    "meaning": "grand; gros",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "w110",
+    "type": "vocab",
+    "level": 1,
+    "order": 1460,
+    "hanzi": "小",
+    "pinyin": "xiǎo",
+    "meaning": "petit",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "g-hsk1-10-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 1470,
+    "grammarId": "g-hsk1-10",
+    "grammarTitle": "L'adverbe 'Tout' (都)",
+    "grammarStructure": "Sujets + 都 + Verbe",
+    "grammarExplanation": "都 (dōu) se place toujours après le sujet pluriel et avant le verbe.",
+    "sentence": "我们都认识他。",
+    "pinyin": "Wǒmen dōu rènshi tā.",
+    "translation": "Nous le connaissons tous.",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-10-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 1480,
+    "grammarId": "g-hsk1-10",
+    "grammarTitle": "L'adverbe 'Tout' (都)",
+    "grammarStructure": "Sujets + 都 + Verbe",
+    "grammarExplanation": "都 (dōu) se place toujours après le sujet pluriel et avant le verbe.",
+    "sentence": "他们都是学生。",
+    "pinyin": "Tāmen dōu shì xuésheng.",
+    "translation": "Ils sont tous étudiants.",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-10-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 1490,
+    "grammarId": "g-hsk1-10",
+    "grammarTitle": "L'adverbe 'Tout' (都)",
+    "grammarStructure": "Sujets + 都 + Verbe",
+    "grammarExplanation": "都 (dōu) se place toujours après le sujet pluriel et avant le verbe.",
+    "sentence": "我们都喜欢吃米饭。",
+    "pinyin": "Wǒmen dōu xǐhuan chī mǐfàn.",
+    "translation": "Nous aimons tous manger du riz.",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w111",
+    "type": "vocab",
+    "level": 1,
+    "order": 1500,
+    "hanzi": "多",
+    "pinyin": "duō",
+    "meaning": "beaucoup; nombreux",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "w112",
+    "type": "vocab",
+    "level": 1,
+    "order": 1510,
+    "hanzi": "少",
+    "pinyin": "shǎo",
+    "meaning": "peu; rare",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "w113",
+    "type": "vocab",
+    "level": 1,
+    "order": 1520,
+    "hanzi": "冷",
+    "pinyin": "lěng",
+    "meaning": "froid",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "w114",
+    "type": "vocab",
+    "level": 1,
+    "order": 1530,
+    "hanzi": "热",
+    "pinyin": "rè",
+    "meaning": "chaud",
+    "tags": [
+      "adjectif"
+    ]
+  },
+  {
+    "id": "w115",
+    "type": "vocab",
+    "level": 1,
+    "order": 1540,
+    "hanzi": "天气",
+    "pinyin": "tiānqì",
+    "meaning": "temps (météo)",
+    "tags": [
+      "nature"
+    ]
+  },
+  {
+    "id": "w116",
+    "type": "vocab",
+    "level": 1,
+    "order": 1550,
+    "hanzi": "下雨",
+    "pinyin": "xià yǔ",
+    "meaning": "pleuvoir",
+    "tags": [
+      "nature"
+    ]
+  },
+  {
+    "id": "w117",
+    "type": "vocab",
+    "level": 1,
+    "order": 1560,
+    "hanzi": "上",
+    "pinyin": "shàng",
+    "meaning": "au-dessus; monter",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w118",
+    "type": "vocab",
+    "level": 1,
+    "order": 1570,
+    "hanzi": "下",
+    "pinyin": "xià",
+    "meaning": "en dessous; descendre",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w119",
+    "type": "vocab",
+    "level": 1,
+    "order": 1580,
+    "hanzi": "前",
+    "pinyin": "qián",
+    "meaning": "avant; devant",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w120",
+    "type": "vocab",
+    "level": 1,
+    "order": 1590,
+    "hanzi": "后",
+    "pinyin": "hòu",
+    "meaning": "après; derrière",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w121",
+    "type": "vocab",
+    "level": 1,
+    "order": 1600,
+    "hanzi": "里",
+    "pinyin": "lǐ",
+    "meaning": "dans; à l'intérieur",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w122",
+    "type": "vocab",
+    "level": 1,
+    "order": 1610,
+    "hanzi": "外",
+    "pinyin": "wài",
+    "meaning": "dehors; extérieur",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w123",
+    "type": "vocab",
+    "level": 1,
+    "order": 1620,
+    "hanzi": "左",
+    "pinyin": "zuǒ",
+    "meaning": "gauche",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w124",
+    "type": "vocab",
+    "level": 1,
+    "order": 1630,
+    "hanzi": "右",
+    "pinyin": "yòu",
+    "meaning": "droite",
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "w125",
+    "type": "vocab",
+    "level": 1,
+    "order": 1640,
+    "hanzi": "北京",
+    "pinyin": "Běijīng",
+    "meaning": "Pékin",
+    "tags": [
+      "lieu"
+    ]
+  },
+  {
+    "id": "w126",
+    "type": "vocab",
+    "level": 1,
+    "order": 1650,
+    "hanzi": "衣服",
+    "pinyin": "yīfu",
+    "meaning": "vêtements",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w127",
+    "type": "vocab",
+    "level": 1,
+    "order": 1660,
+    "hanzi": "书",
+    "pinyin": "shū",
+    "meaning": "livre",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w128",
+    "type": "vocab",
+    "level": 1,
+    "order": 1670,
+    "hanzi": "桌子",
+    "pinyin": "zhuōzi",
+    "meaning": "table",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w129",
+    "type": "vocab",
+    "level": 1,
+    "order": 1680,
+    "hanzi": "椅子",
+    "pinyin": "yǐzi",
+    "meaning": "chaise",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w130",
+    "type": "vocab",
+    "level": 1,
+    "order": 1690,
+    "hanzi": "杯子",
+    "pinyin": "bēizi",
+    "meaning": "verre; tasse",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "g-hsk1-11-s1",
+    "type": "grammar",
+    "level": 1,
+    "order": 1700,
+    "grammarId": "g-hsk1-11",
+    "grammarTitle": "L'insistance avec 太...了",
+    "grammarStructure": "太 + Adjectif + 了",
+    "grammarExplanation": "Pour dire 'trop' ou 'extrêmement'.",
+    "sentence": "太好了！",
+    "pinyin": "Tài hǎo le!",
+    "translation": "C'est trop bien ! / Génial !",
+    "words": [],
+    "sentenceIndex": 0,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-11-s2",
+    "type": "grammar",
+    "level": 1,
+    "order": 1710,
+    "grammarId": "g-hsk1-11",
+    "grammarTitle": "L'insistance avec 太...了",
+    "grammarStructure": "太 + Adjectif + 了",
+    "grammarExplanation": "Pour dire 'trop' ou 'extrêmement'.",
+    "sentence": "太贵了！",
+    "pinyin": "Tài guì le!",
+    "translation": "C'est trop cher !",
+    "words": [],
+    "sentenceIndex": 1,
+    "totalSentences": 3
+  },
+  {
+    "id": "g-hsk1-11-s3",
+    "type": "grammar",
+    "level": 1,
+    "order": 1720,
+    "grammarId": "g-hsk1-11",
+    "grammarTitle": "L'insistance avec 太...了",
+    "grammarStructure": "太 + Adjectif + 了",
+    "grammarExplanation": "Pour dire 'trop' ou 'extrêmement'.",
+    "sentence": "太冷了！",
+    "pinyin": "Tài lěng le!",
+    "translation": "Il fait trop froid !",
+    "words": [],
+    "sentenceIndex": 2,
+    "totalSentences": 3
+  },
+  {
+    "id": "w131",
+    "type": "vocab",
+    "level": 1,
+    "order": 1730,
+    "hanzi": "电话",
+    "pinyin": "diànhuà",
+    "meaning": "téléphone",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w132",
+    "type": "vocab",
+    "level": 1,
+    "order": 1740,
+    "hanzi": "电视",
+    "pinyin": "diànshì",
+    "meaning": "télévision",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w133",
+    "type": "vocab",
+    "level": 1,
+    "order": 1750,
+    "hanzi": "电脑",
+    "pinyin": "diànnǎo",
+    "meaning": "ordinateur",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w134",
+    "type": "vocab",
+    "level": 1,
+    "order": 1760,
+    "hanzi": "钟",
+    "pinyin": "zhōng",
+    "meaning": "horloge; cloche",
+    "tags": [
+      "objet"
+    ]
+  },
+  {
+    "id": "w135",
+    "type": "vocab",
+    "level": 1,
+    "order": 1770,
+    "hanzi": "猫",
+    "pinyin": "māo",
+    "meaning": "chat",
+    "tags": [
+      "animal"
+    ]
+  },
+  {
+    "id": "w136",
+    "type": "vocab",
+    "level": 1,
+    "order": 1780,
+    "hanzi": "狗",
+    "pinyin": "gǒu",
+    "meaning": "chien",
+    "tags": [
+      "animal"
+    ]
+  },
+  {
+    "id": "w137",
+    "type": "vocab",
+    "level": 1,
+    "order": 1790,
+    "hanzi": "请",
+    "pinyin": "qǐng",
+    "meaning": "s'il vous plaît; inviter",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "w138",
+    "type": "vocab",
+    "level": 1,
+    "order": 1800,
+    "hanzi": "谢谢",
+    "pinyin": "xièxie",
+    "meaning": "merci",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "w139",
+    "type": "vocab",
+    "level": 1,
+    "order": 1810,
+    "hanzi": "对不起",
+    "pinyin": "duìbuqǐ",
+    "meaning": "pardon; désolé",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "w140",
+    "type": "vocab",
+    "level": 1,
+    "order": 1820,
+    "hanzi": "没关系",
+    "pinyin": "méi guānxi",
+    "meaning": "ce n'est rien; de rien",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "w141",
+    "type": "vocab",
+    "level": 1,
+    "order": 1830,
+    "hanzi": "再见",
+    "pinyin": "zàijiàn",
+    "meaning": "au revoir",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "w142",
+    "type": "vocab",
+    "level": 1,
+    "order": 1840,
+    "hanzi": "你好",
+    "pinyin": "nǐ hǎo",
+    "meaning": "bonjour; salut",
+    "tags": [
+      "politesse"
+    ]
+  },
+  {
+    "id": "s001",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1850,
+    "sentence": "我____老师。",
+    "blank": "是",
+    "options": [
+      "是",
+      "有",
+      "叫",
+      "在"
+    ],
+    "translation": "Je suis professeur.",
+    "words": [
+      "w006"
+    ]
+  },
+  {
+    "id": "s035",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1860,
+    "sentence": "你____不____？",
+    "blank": "好",
+    "options": [
+      "好",
+      "对",
+      "是",
+      "吗"
+    ],
+    "translation": "Ça va ?",
+    "words": [
+      "w010",
+      "w017"
+    ]
+  },
+  {
+    "id": "s021",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1870,
+    "sentence": "你____什么？",
+    "blank": "叫",
+    "options": [
+      "叫",
+      "是",
+      "有",
+      "住"
+    ],
+    "translation": "Comment tu t'appelles ?",
+    "words": [
+      "w016",
+      "w019"
+    ]
+  },
+  {
+    "id": "s002",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1880,
+    "sentence": "你____什么名字？",
+    "blank": "叫",
+    "options": [
+      "叫",
+      "是",
+      "有",
+      "住"
+    ],
+    "translation": "Comment tu t'appelles ?",
+    "words": [
+      "w019",
+      "w020"
+    ]
+  },
+  {
+    "id": "s033",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1890,
+    "sentence": "他____我是好朋友。",
+    "blank": "和",
+    "options": [
+      "和",
+      "与",
+      "或",
+      "但"
+    ],
+    "translation": "Lui et moi sommes de bons amis.",
+    "words": [
+      "w001",
+      "w010",
+      "w023"
+    ]
+  },
+  {
+    "id": "s028",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1900,
+    "sentence": "你____哪个国家？",
+    "blank": "是",
+    "options": [
+      "是",
+      "在",
+      "有",
+      "叫"
+    ],
+    "translation": "Tu es de quel pays ?",
+    "words": [
+      "w002",
+      "w006",
+      "w034"
+    ]
+  },
+  {
+    "id": "s029",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1910,
+    "sentence": "现在____点半了。",
+    "blank": "两",
+    "options": [
+      "两",
+      "三",
+      "四",
+      "五"
+    ],
+    "translation": "Il est deux heures et demie maintenant.",
+    "words": [
+      "w056",
+      "w062"
+    ]
+  },
+  {
+    "id": "s037",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1920,
+    "sentence": "她的头发____长。",
+    "blank": "很",
+    "options": [
+      "很",
+      "太",
+      "都",
+      "真"
+    ],
+    "translation": "Ses cheveux sont très longs.",
+    "words": [
+      "w004",
+      "w008",
+      "w081"
+    ]
+  },
+  {
+    "id": "s004",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1930,
+    "sentence": "我们都____学生。",
+    "blank": "是",
+    "options": [
+      "是",
+      "有",
+      "在",
+      "叫"
+    ],
+    "translation": "Nous sommes tous étudiants.",
+    "words": [
+      "w006",
+      "w022",
+      "w083"
+    ]
+  },
+  {
+    "id": "s010",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1940,
+    "sentence": "现在几____了？",
+    "blank": "点",
+    "options": [
+      "点",
+      "分",
+      "时",
+      "号"
+    ],
+    "translation": "Quelle heure est-il ?",
+    "words": [
+      "w056",
+      "w062",
+      "w085"
+    ]
+  },
+  {
+    "id": "s012",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1950,
+    "sentence": "你____说中文吗？",
+    "blank": "会",
+    "options": [
+      "会",
+      "能",
+      "可以",
+      "想"
+    ],
+    "translation": "Tu sais parler chinois ?",
+    "words": [
+      "w015",
+      "w017",
+      "w089",
+      "w013"
+    ]
+  },
+  {
+    "id": "s017",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1960,
+    "sentence": "他____说中文，____说英文。",
+    "blank": "会",
+    "options": [
+      "会",
+      "能",
+      "可以",
+      "想"
+    ],
+    "translation": "Il sait parler chinois et anglais.",
+    "words": [
+      "w015",
+      "w013",
+      "w089"
+    ]
+  },
+  {
+    "id": "s039",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1970,
+    "sentence": "他____会写汉字。",
+    "blank": "不",
+    "options": [
+      "不",
+      "没",
+      "别",
+      "都"
+    ],
+    "translation": "Il ne sait pas écrire les caractères chinois.",
+    "words": [
+      "w007",
+      "w072",
+      "w089"
+    ]
+  },
+  {
+    "id": "s008",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1980,
+    "sentence": "我想____去学校。",
+    "blank": "明天",
+    "options": [
+      "明天",
+      "今天",
+      "昨天",
+      "现在"
+    ],
+    "translation": "Je veux aller à l'école demain.",
+    "words": [
+      "w054",
+      "w074",
+      "w087",
+      "w094"
+    ]
+  },
+  {
+    "id": "s031",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 1990,
+    "sentence": "我们____一起去学校。",
+    "blank": "都",
+    "options": [
+      "都",
+      "也",
+      "很",
+      "还"
+    ],
+    "translation": "Nous allons tous à l'école ensemble.",
+    "words": [
+      "w074",
+      "w083",
+      "w094"
+    ]
+  },
+  {
+    "id": "s034",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2000,
+    "sentence": "我今天____去学校了。",
+    "blank": "没",
+    "options": [
+      "没",
+      "不",
+      "别",
+      "都"
+    ],
+    "translation": "Je ne suis pas allé à l'école aujourd'hui.",
+    "words": [
+      "w053",
+      "w074",
+      "w094"
+    ]
+  },
+  {
+    "id": "s023",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2010,
+    "sentence": "他____在医院工作。",
+    "blank": "不",
+    "options": [
+      "不",
+      "没",
+      "别",
+      "都"
+    ],
+    "translation": "Il ne travaille pas à l'hôpital.",
+    "words": [
+      "w003",
+      "w007",
+      "w093",
+      "w095"
+    ]
+  },
+  {
+    "id": "s009",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2020,
+    "sentence": "他在商店____东西。",
+    "blank": "买",
+    "options": [
+      "买",
+      "看",
+      "吃",
+      "去"
+    ],
+    "translation": "Il achète des choses au magasin.",
+    "words": [
+      "w069",
+      "w097"
+    ]
+  },
+  {
+    "id": "s014",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2030,
+    "sentence": "下午我们去____吧。",
+    "blank": "饭店",
+    "options": [
+      "饭店",
+      "学校",
+      "医院",
+      "商店"
+    ],
+    "translation": "Allons au restaurant cet après-midi.",
+    "words": [
+      "w065",
+      "w074",
+      "w098"
+    ]
+  },
+  {
+    "id": "s038",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2040,
+    "sentence": "火车____八点出发。",
+    "blank": "早上",
+    "options": [
+      "早上",
+      "下午",
+      "晚上",
+      "中午"
+    ],
+    "translation": "Le train part le matin à 8 heures.",
+    "words": [
+      "w045",
+      "w062",
+      "w064",
+      "w099"
+    ]
+  },
+  {
+    "id": "s016",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2050,
+    "sentence": "我____坐出租车去机场。",
+    "blank": "想",
+    "options": [
+      "想",
+      "能",
+      "会",
+      "要"
+    ],
+    "translation": "Je veux prendre un taxi pour aller à l'aéroport.",
+    "words": [
+      "w078",
+      "w087",
+      "w101"
+    ]
+  },
+  {
+    "id": "s007",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2060,
+    "sentence": "你____喝茶吗？",
+    "blank": "喜欢",
+    "options": [
+      "喜欢",
+      "可以",
+      "能",
+      "会"
+    ],
+    "translation": "Tu aimes boire du thé ?",
+    "words": [
+      "w017",
+      "w068",
+      "w086",
+      "w104"
+    ]
+  },
+  {
+    "id": "s026",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2070,
+    "sentence": "我____喝水，不喝茶。",
+    "blank": "只",
+    "options": [
+      "只",
+      "都",
+      "也",
+      "还"
+    ],
+    "translation": "Je bois seulement de l'eau, pas de thé.",
+    "words": [
+      "w007",
+      "w068",
+      "w103",
+      "w104"
+    ]
+  },
+  {
+    "id": "s018",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2080,
+    "sentence": "这个菜____辣了！",
+    "blank": "太",
+    "options": [
+      "太",
+      "很",
+      "真",
+      "都"
+    ],
+    "translation": "Ce plat est trop épicé !",
+    "words": [
+      "w032",
+      "w049",
+      "w084",
+      "w106"
+    ]
+  },
+  {
+    "id": "s024",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2090,
+    "sentence": "妈妈____我去买菜。",
+    "blank": "让",
+    "options": [
+      "让",
+      "叫",
+      "说",
+      "问"
+    ],
+    "translation": "Maman m'a demandé d'aller acheter des légumes.",
+    "words": [
+      "w025",
+      "w069",
+      "w106"
+    ]
+  },
+  {
+    "id": "s020",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2100,
+    "sentence": "我____买了水果。",
+    "blank": "昨天",
+    "options": [
+      "昨天",
+      "今天",
+      "明天",
+      "现在"
+    ],
+    "translation": "J'ai acheté des fruits hier.",
+    "words": [
+      "w055",
+      "w069",
+      "w107"
+    ]
+  },
+  {
+    "id": "s032",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2110,
+    "sentence": "这____水果多少钱？",
+    "blank": "些",
+    "options": [
+      "些",
+      "个",
+      "本",
+      "件"
+    ],
+    "translation": "Combien coûtent ces fruits ?",
+    "words": [
+      "w050",
+      "w051",
+      "w107"
+    ]
+  },
+  {
+    "id": "s013",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2120,
+    "sentence": "苹果____块钱一斤。",
+    "blank": "五",
+    "options": [
+      "三",
+      "五",
+      "八",
+      "十"
+    ],
+    "translation": "Les pommes coûtent 5 yuans le demi-kilo.",
+    "words": [
+      "w042",
+      "w052",
+      "w108"
+    ]
+  },
+  {
+    "id": "s040",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2130,
+    "sentence": "这里____很多好东西。",
+    "blank": "有",
+    "options": [
+      "有",
+      "是",
+      "在",
+      "叫"
+    ],
+    "translation": "Il y a plein de bonnes choses ici.",
+    "words": [
+      "w009",
+      "w036",
+      "w111"
+    ]
+  },
+  {
+    "id": "s006",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2140,
+    "sentence": "今天天气____好！",
+    "blank": "很",
+    "options": [
+      "很",
+      "太",
+      "都",
+      "也"
+    ],
+    "translation": "Le temps est très beau aujourd'hui !",
+    "words": [
+      "w053",
+      "w081",
+      "w115"
+    ]
+  },
+  {
+    "id": "s011",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2150,
+    "sentence": "我家里____五口人。",
+    "blank": "有",
+    "options": [
+      "有",
+      "是",
+      "在",
+      "叫"
+    ],
+    "translation": "Il y a cinq personnes dans ma famille.",
+    "words": [
+      "w009",
+      "w011",
+      "w030",
+      "w121"
+    ]
+  },
+  {
+    "id": "s003",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2160,
+    "sentence": "他____在北京。",
+    "blank": "不",
+    "options": [
+      "不",
+      "也",
+      "都",
+      "很"
+    ],
+    "translation": "Il n'est pas à Pékin.",
+    "words": [
+      "w003",
+      "w007",
+      "w125"
+    ]
+  },
+  {
+    "id": "s025",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2170,
+    "sentence": "这件衣服____漂亮！",
+    "blank": "真",
+    "options": [
+      "真",
+      "很",
+      "太",
+      "都"
+    ],
+    "translation": "Ce vêtement est vraiment joli !",
+    "words": [
+      "w032",
+      "w126"
+    ]
+  },
+  {
+    "id": "s005",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2180,
+    "sentence": "这____书是我的。",
+    "blank": "本",
+    "options": [
+      "本",
+      "个",
+      "张",
+      "件"
+    ],
+    "translation": "Ce livre est à moi.",
+    "words": [
+      "w032",
+      "w049",
+      "w127"
+    ]
+  },
+  {
+    "id": "s019",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2190,
+    "sentence": "书在桌子____。",
+    "blank": "上",
+    "options": [
+      "上",
+      "下",
+      "里",
+      "外"
+    ],
+    "translation": "Le livre est sur la table.",
+    "words": [
+      "w117",
+      "w127",
+      "w128"
+    ]
+  },
+  {
+    "id": "s015",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2200,
+    "sentence": "他____打电话呢。",
+    "blank": "在",
+    "options": [
+      "在",
+      "是",
+      "有",
+      "叫"
+    ],
+    "translation": "Il est en train de téléphoner.",
+    "words": [
+      "w031",
+      "w080",
+      "w131"
+    ]
+  },
+  {
+    "id": "s036",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2210,
+    "sentence": "我____电话给老师。",
+    "blank": "打",
+    "options": [
+      "打",
+      "有",
+      "看",
+      "写"
+    ],
+    "translation": "Je téléphone au professeur.",
+    "words": [
+      "w021",
+      "w080",
+      "w131"
+    ]
+  },
+  {
+    "id": "s027",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2220,
+    "sentence": "他们____在看电视。",
+    "blank": "都",
+    "options": [
+      "都",
+      "也",
+      "很",
+      "太"
+    ],
+    "translation": "Ils regardent tous la télé.",
+    "words": [
+      "w003",
+      "w005",
+      "w070",
+      "w083",
+      "w132"
+    ]
+  },
+  {
+    "id": "s030",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2230,
+    "sentence": "猫____桌子下面。",
+    "blank": "在",
+    "options": [
+      "在",
+      "有",
+      "是",
+      "去"
+    ],
+    "translation": "Le chat est sous la table.",
+    "words": [
+      "w031",
+      "w118",
+      "w128",
+      "w135"
+    ]
+  },
+  {
+    "id": "s022",
+    "type": "fill-blank",
+    "level": 1,
+    "order": 2240,
+    "sentence": "我家有____口人。",
+    "blank": "三",
+    "options": [
+      "一",
+      "三",
+      "七",
+      "十"
+    ],
+    "translation": "Il y a trois personnes dans ma famille.",
+    "words": [
+      "w011",
+      "w030",
+      "w040",
+      "w245"
+    ]
+  },
+  {
+    "id": "t121",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2250,
+    "sentence": "你呢？",
+    "pinyin": "Nǐ ne?",
+    "translation": "Et toi ?",
+    "words": [
+      "w018"
+    ]
+  },
+  {
+    "id": "t006",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2260,
+    "sentence": "他的名字叫李明。",
+    "pinyin": "Tā de míngzì jiào Lǐ Míng.",
+    "translation": "Il s'appelle Li Ming.",
+    "words": [
+      "w003",
+      "w008",
+      "w019",
+      "w020"
+    ]
+  },
+  {
+    "id": "t001",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2270,
+    "sentence": "我是学生。",
+    "pinyin": "Wǒ shì xuésheng.",
+    "translation": "Je suis étudiant.",
+    "words": [
+      "w001",
+      "w006",
+      "w022"
+    ]
+  },
+  {
+    "id": "t012",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2280,
+    "sentence": "我的朋友叫小明。",
+    "pinyin": "Wǒde péngyou jiào Xiǎo Míng.",
+    "translation": "Mon ami s'appelle Xiao Ming.",
+    "words": [
+      "w001",
+      "w008",
+      "w019",
+      "w023"
+    ]
+  },
+  {
+    "id": "t153",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2290,
+    "sentence": "我哥哥在公司工作。",
+    "pinyin": "Wǒ gēge zài gōngsī gōngzuò.",
+    "translation": "Mon grand frère travaille dans une entreprise.",
+    "words": [
+      "w026"
+    ]
+  },
+  {
+    "id": "t122",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2300,
+    "sentence": "这是我妹妹。",
+    "pinyin": "Zhè shì wǒ mèimei.",
+    "translation": "C'est ma petite sœur.",
+    "words": [
+      "w029"
+    ]
+  },
+  {
+    "id": "t018",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2310,
+    "sentence": "妈妈在家做饭。",
+    "pinyin": "Māma zài jiā zuò fàn.",
+    "translation": "Maman cuisine à la maison.",
+    "words": [
+      "w025",
+      "w030",
+      "w031"
+    ]
+  },
+  {
+    "id": "t123",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2320,
+    "sentence": "那是我的书。",
+    "pinyin": "Nà shì wǒ de shū.",
+    "translation": "C'est mon livre.",
+    "words": [
+      "w033"
+    ]
+  },
+  {
+    "id": "t029",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2330,
+    "sentence": "你家在哪儿？",
+    "pinyin": "Nǐ jiā zài nǎr?",
+    "translation": "Où est ta maison ?",
+    "words": [
+      "w002",
+      "w030",
+      "w031",
+      "w035"
+    ]
+  },
+  {
+    "id": "t124",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2340,
+    "sentence": "他在那儿。",
+    "pinyin": "Tā zài nà'er.",
+    "translation": "Il est là-bas.",
+    "words": [
+      "w037"
+    ]
+  },
+  {
+    "id": "t125",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2350,
+    "sentence": "七个人。",
+    "pinyin": "Qī gè rén.",
+    "translation": "Sept personnes.",
+    "words": [
+      "w044"
+    ]
+  },
+  {
+    "id": "t126",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2360,
+    "sentence": "九点钟。",
+    "pinyin": "Jiǔ diǎn zhōng.",
+    "translation": "Neuf heures.",
+    "words": [
+      "w046"
+    ]
+  },
+  {
+    "id": "t127",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2370,
+    "sentence": "一百块钱。",
+    "pinyin": "Yī bǎi kuài qián.",
+    "translation": "Cent yuans.",
+    "words": [
+      "w048"
+    ]
+  },
+  {
+    "id": "t022",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2380,
+    "sentence": "我有两个姐姐。",
+    "pinyin": "Wǒ yǒu liǎng gè jiějie.",
+    "translation": "J'ai deux grandes sœurs.",
+    "words": [
+      "w001",
+      "w009",
+      "w027",
+      "w049"
+    ]
+  },
+  {
+    "id": "t164",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2390,
+    "sentence": "这块肉很好吃。",
+    "pinyin": "Zhè kuài ròu hěn hǎochī.",
+    "translation": "Ce morceau de viande est délicieux.",
+    "words": [
+      "w052"
+    ]
+  },
+  {
+    "id": "t128",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2400,
+    "sentence": "今天是五号还是六号？",
+    "pinyin": "Jīntiān shì wǔ hào háishì liù hào?",
+    "translation": "Aujourd'hui, c'est le 5 ou le 6 ?",
+    "words": [
+      "w059"
+    ]
+  },
+  {
+    "id": "t030",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2410,
+    "sentence": "今天是几月几号？",
+    "pinyin": "Jīntiān shì jǐ yuè jǐ hào?",
+    "translation": "Quelle est la date aujourd'hui ?",
+    "words": [
+      "w053",
+      "w058",
+      "w060"
+    ]
+  },
+  {
+    "id": "t129",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2420,
+    "sentence": "中午我吃面条。",
+    "pinyin": "Zhōngwǔ wǒ chī miàntiáo.",
+    "translation": "À midi, je mange des nouilles.",
+    "words": [
+      "w066"
+    ]
+  },
+  {
+    "id": "t130",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2430,
+    "sentence": "我在听音乐。",
+    "pinyin": "Wǒ zài tīng yīnyuè.",
+    "translation": "J'écoute de la musique.",
+    "words": [
+      "w071"
+    ]
+  },
+  {
+    "id": "t131",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2440,
+    "sentence": "读这本书。",
+    "pinyin": "Dú zhè běn shū.",
+    "translation": "Lis ce livre.",
+    "words": [
+      "w073"
+    ]
+  },
+  {
+    "id": "t132",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2450,
+    "sentence": "开门吧。",
+    "pinyin": "Kāi mén ba.",
+    "translation": "Ouvre la porte.",
+    "words": [
+      "w079"
+    ]
+  },
+  {
+    "id": "t013",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2460,
+    "sentence": "他们都是中国人。",
+    "pinyin": "Tāmen dōu shì Zhōngguó rén.",
+    "translation": "Ils sont tous chinois.",
+    "words": [
+      "w003",
+      "w005",
+      "w006",
+      "w011",
+      "w012",
+      "w083"
+    ]
+  },
+  {
+    "id": "t021",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2470,
+    "sentence": "现在几点了？",
+    "pinyin": "Xiànzài jǐ diǎn le?",
+    "translation": "Il est quelle heure maintenant ?",
+    "words": [
+      "w056",
+      "w062",
+      "w085"
+    ]
+  },
+  {
+    "id": "t027",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2480,
+    "sentence": "他哥哥会说英语。",
+    "pinyin": "Tā gēge huì shuō Yīngyǔ.",
+    "translation": "Son grand frère sait parler anglais.",
+    "words": [
+      "w003",
+      "w015",
+      "w026",
+      "w089"
+    ]
+  },
+  {
+    "id": "t014",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2490,
+    "sentence": "我每天八点去学校。",
+    "pinyin": "Wǒ měitiān bā diǎn qù xuéxiào.",
+    "translation": "Je vais à l'école à 8 heures tous les jours.",
+    "words": [
+      "w045",
+      "w062",
+      "w074",
+      "w094"
+    ]
+  },
+  {
+    "id": "t024",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2500,
+    "sentence": "他在医院工作。",
+    "pinyin": "Tā zài yīyuàn gōngzuò.",
+    "translation": "Il travaille à l'hôpital.",
+    "words": [
+      "w003",
+      "w031",
+      "w093",
+      "w095"
+    ]
+  },
+  {
+    "id": "t008",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2510,
+    "sentence": "我爸爸是医生。",
+    "pinyin": "Wǒ bàba shì yīshēng.",
+    "translation": "Mon père est médecin.",
+    "words": [
+      "w001",
+      "w024",
+      "w006",
+      "w096"
+    ]
+  },
+  {
+    "id": "t005",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2520,
+    "sentence": "我们去商店买东西。",
+    "pinyin": "Wǒmen qù shāngdiàn mǎi dōngxi.",
+    "translation": "Nous allons au magasin acheter des choses.",
+    "words": [
+      "w069",
+      "w074",
+      "w097"
+    ]
+  },
+  {
+    "id": "t133",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2530,
+    "sentence": "坐公共汽车去学校。",
+    "pinyin": "Zuò gōnggòngqìchē qù xuéxiào.",
+    "translation": "Aller à l'école en bus.",
+    "words": [
+      "w102"
+    ]
+  },
+  {
+    "id": "t003",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2540,
+    "sentence": "她喜欢喝茶。",
+    "pinyin": "Tā xǐhuān hē chá.",
+    "translation": "Elle aime boire du thé.",
+    "words": [
+      "w004",
+      "w086",
+      "w068",
+      "w104"
+    ]
+  },
+  {
+    "id": "t015",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2550,
+    "sentence": "你喝茶还是喝水？",
+    "pinyin": "Nǐ hē chá háishi hē shuǐ?",
+    "translation": "Tu bois du thé ou de l'eau ?",
+    "words": [
+      "w002",
+      "w068",
+      "w103",
+      "w104"
+    ]
+  },
+  {
+    "id": "t028",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2560,
+    "sentence": "我想吃米饭和菜。",
+    "pinyin": "Wǒ xiǎng chī mǐfàn hé cài.",
+    "translation": "Je veux manger du riz avec des légumes.",
+    "words": [
+      "w001",
+      "w067",
+      "w087",
+      "w105",
+      "w106"
+    ]
+  },
+  {
+    "id": "t010",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2570,
+    "sentence": "这个苹果很大。",
+    "pinyin": "Zhège píngguǒ hěn dà.",
+    "translation": "Cette pomme est très grosse.",
+    "words": [
+      "w032",
+      "w049",
+      "w081",
+      "w108",
+      "w109"
+    ]
+  },
+  {
+    "id": "t017",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2580,
+    "sentence": "我弟弟很小，才五岁。",
+    "pinyin": "Wǒ dìdi hěn xiǎo, cái wǔ suì.",
+    "translation": "Mon petit frère est très jeune, il n'a que cinq ans.",
+    "words": [
+      "w001",
+      "w028",
+      "w042",
+      "w081",
+      "w110"
+    ]
+  },
+  {
+    "id": "t134",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2590,
+    "sentence": "人很少。",
+    "pinyin": "Rén hěn shǎo.",
+    "translation": "Il y a peu de monde.",
+    "words": [
+      "w112"
+    ]
+  },
+  {
+    "id": "t135",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2600,
+    "sentence": "今天天气很热。",
+    "pinyin": "Jīntiān tiānqì hěn rè.",
+    "translation": "Il fait très chaud aujourd'hui.",
+    "words": [
+      "w114"
+    ]
+  },
+  {
+    "id": "t004",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2610,
+    "sentence": "今天天气很冷。",
+    "pinyin": "Jīntiān tiānqì hěn lěng.",
+    "translation": "Il fait très froid aujourd'hui.",
+    "words": [
+      "w053",
+      "w081",
+      "w113",
+      "w115"
+    ]
+  },
+  {
+    "id": "t011",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2620,
+    "sentence": "我不喜欢冷天气。",
+    "pinyin": "Wǒ bù xǐhuān lěng tiānqì.",
+    "translation": "Je n'aime pas le temps froid.",
+    "words": [
+      "w001",
+      "w007",
+      "w086",
+      "w113",
+      "w115"
+    ]
+  },
+  {
+    "id": "t136",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2630,
+    "sentence": "他在前面。",
+    "pinyin": "Tā zài qiánmiàn.",
+    "translation": "Il est devant.",
+    "words": [
+      "w119"
+    ]
+  },
+  {
+    "id": "t137",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2640,
+    "sentence": "往后走。",
+    "pinyin": "Wǎng hòu zǒu.",
+    "translation": "Marche vers l'arrière.",
+    "words": [
+      "w120"
+    ]
+  },
+  {
+    "id": "t016",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2650,
+    "sentence": "外面下雨了，别出去。",
+    "pinyin": "Wàimiàn xià yǔ le, bié chūqù.",
+    "translation": "Il pleut dehors, ne sors pas.",
+    "words": [
+      "w085",
+      "w116",
+      "w122"
+    ]
+  },
+  {
+    "id": "t138",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2660,
+    "sentence": "往左走。",
+    "pinyin": "Wǎng zuǒ zǒu.",
+    "translation": "Va à gauche.",
+    "words": [
+      "w123"
+    ]
+  },
+  {
+    "id": "t139",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2670,
+    "sentence": "往右走。",
+    "pinyin": "Wǎng yòu zǒu.",
+    "translation": "Va à droite.",
+    "words": [
+      "w124"
+    ]
+  },
+  {
+    "id": "t026",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2680,
+    "sentence": "我们明天坐飞机去北京。",
+    "pinyin": "Wǒmen míngtiān zuò fēijī qù Běijīng.",
+    "translation": "Nous prenons l'avion pour Pékin demain.",
+    "words": [
+      "w054",
+      "w074",
+      "w078",
+      "w100",
+      "w125"
+    ]
+  },
+  {
+    "id": "t019",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2690,
+    "sentence": "这本书是他的。",
+    "pinyin": "Zhè běn shū shì tā de.",
+    "translation": "Ce livre est le sien.",
+    "words": [
+      "w003",
+      "w006",
+      "w008",
+      "w032",
+      "w127"
+    ]
+  },
+  {
+    "id": "t020",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2700,
+    "sentence": "我能看中文书。",
+    "pinyin": "Wǒ néng kàn Zhōngwén shū.",
+    "translation": "Je peux lire des livres en chinois.",
+    "words": [
+      "w001",
+      "w013",
+      "w070",
+      "w088",
+      "w127"
+    ]
+  },
+  {
+    "id": "t140",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2710,
+    "sentence": "这是一把椅子。",
+    "pinyin": "Zhè shì yī bǎ yǐzi.",
+    "translation": "C'est une chaise.",
+    "words": [
+      "w129"
+    ]
+  },
+  {
+    "id": "t007",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2720,
+    "sentence": "桌子上有一杯水。",
+    "pinyin": "Zhuōzi shàng yǒu yī bēi shuǐ.",
+    "translation": "Il y a un verre d'eau sur la table.",
+    "words": [
+      "w009",
+      "w103",
+      "w117",
+      "w128",
+      "w130"
+    ]
+  },
+  {
+    "id": "t023",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2730,
+    "sentence": "这里有电话吗？",
+    "pinyin": "Zhèlǐ yǒu diànhuà ma?",
+    "translation": "Il y a un téléphone ici ?",
+    "words": [
+      "w009",
+      "w017",
+      "w036",
+      "w131"
+    ]
+  },
+  {
+    "id": "t141",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2740,
+    "sentence": "我的电脑坏了。",
+    "pinyin": "Wǒ de diànnǎo huài le.",
+    "translation": "Mon ordinateur est en panne.",
+    "words": [
+      "w133"
+    ]
+  },
+  {
+    "id": "t142",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2750,
+    "sentence": "三点钟。",
+    "pinyin": "Sān diǎn zhōng.",
+    "translation": "Trois heures piled.",
+    "words": [
+      "w134"
+    ]
+  },
+  {
+    "id": "t143",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2760,
+    "sentence": "我很喜欢狗。",
+    "pinyin": "Wǒ hěn xǐhuān gǒu.",
+    "translation": "J'aime beaucoup les chiens.",
+    "words": [
+      "w136"
+    ]
+  },
+  {
+    "id": "t009",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2770,
+    "sentence": "请问，火车站在哪儿？",
+    "pinyin": "Qǐngwèn, huǒchēzhàn zài nǎr?",
+    "translation": "Excusez-moi, où est la gare ?",
+    "words": [
+      "w035",
+      "w099",
+      "w137"
+    ]
+  },
+  {
+    "id": "t025",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2780,
+    "sentence": "谢谢你帮助我。",
+    "pinyin": "Xièxie nǐ bāngzhù wǒ.",
+    "translation": "Merci de m'avoir aidé.",
+    "words": [
+      "w001",
+      "w002",
+      "w138"
+    ]
+  },
+  {
+    "id": "t144",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2790,
+    "sentence": "对不起，我迟到了。",
+    "pinyin": "Duìbùqǐ, wǒ chídào le.",
+    "translation": "Désolé, je suis en retard.",
+    "words": [
+      "w139"
+    ]
+  },
+  {
+    "id": "t145",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2800,
+    "sentence": "没关系。",
+    "pinyin": "Méiguānxi.",
+    "translation": "Ce n'est pas grave.",
+    "words": [
+      "w140"
+    ]
+  },
+  {
+    "id": "t146",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2810,
+    "sentence": "明天再见！",
+    "pinyin": "Míngtiān zàijiàn!",
+    "translation": "À demain !",
+    "words": [
+      "w141"
+    ]
+  },
+  {
+    "id": "t002",
+    "type": "translate-fr",
+    "level": 1,
+    "order": 2820,
+    "sentence": "你好！",
+    "pinyin": "Nǐ hǎo!",
+    "translation": "Bonjour !",
+    "words": [
+      "w142"
+    ]
+  }
+]

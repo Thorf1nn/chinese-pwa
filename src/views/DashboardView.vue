@@ -22,12 +22,20 @@ import {
   type SentencesGlobalStats,
   type SentencesTodaySummary,
 } from '../lib/stats';
-import { Badge, Button, Card, PageHeader, Progress, Separator, Stat } from '../components/ui';
+import { Badge, Button, Card, PageHeader, Progress, Separator, Sheet, Stat } from '../components/ui';
+import QuickCardCreator from '../components/QuickCardCreator.vue';
+import { Plus } from 'lucide-vue-next';
 
 const SENTENCE_QUEUE_KEY = 'chinese-pwa:sentenceQueue';
 
 const deck = useDeckStore();
 const hsk = useHskStore();
+
+const quickCreateOpen = ref(false);
+
+function onQuickCreated() {
+  refresh();
+}
 
 const cardsToday = ref<CardsTodaySummary | null>(null);
 const sentencesToday = ref<SentencesTodaySummary | null>(null);
@@ -289,5 +297,20 @@ function leechReason(r: LeechEntry): string {
     <RouterLink to="/deck" class="text-sm underline underline-offset-4">
       Voir toutes mes cartes →
     </RouterLink>
+
+    <button
+      class="fixed right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition active:scale-90 hover:bg-primary/90"
+      style="bottom: calc(7rem + env(safe-area-inset-bottom))"
+      aria-label="Ajouter un mot"
+      @click="quickCreateOpen = true"
+    >
+      <Plus :size="26" :stroke-width="2.2" />
+    </button>
+
+    <Sheet v-model:open="quickCreateOpen">
+      <template #default="{ close }">
+        <QuickCardCreator @close="close" @created="onQuickCreated" />
+      </template>
+    </Sheet>
   </section>
 </template>

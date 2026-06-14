@@ -2,26 +2,34 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useDeckStore } from '../stores/deck';
+import { useGrammarStore } from '../stores/grammar';
 import { previewIntervals, type ReviewRating } from '../lib/fsrs';
 import { buildQuizQuestion, type QuizQuestion } from '../lib/quiz';
 import { loadSentences, pickSentence, type SentenceItem } from '../lib/sentences';
 import { submitSentenceReview, type SentenceRating } from '../lib/sentence-fsrs';
+import { submitGrammarReview, type GrammarRating } from '../lib/grammar-fsrs';
+import type { GrammarItem } from '../lib/grammar';
 import Flashcard from '../components/Flashcard.vue';
 import ReviewButtons from '../components/ReviewButtons.vue';
 import QuizCard from '../components/QuizCard.vue';
+import SwipeCard from '../components/SwipeCard.vue';
 import SentenceBuilder from '../components/SentenceBuilder.vue';
+import GrammarCard from '../components/GrammarCard.vue';
 import { Badge, Button, Card, PageHeader, Separator, Tabs } from '../components/ui';
 
-type Mode = 'quiz' | 'sentences';
+type Mode = 'swipe' | 'quiz' | 'grammar' | 'sentences';
 const MODE_KEY = 'chinese-pwa:reviewMode';
 
 function readMode(): Mode {
   const stored = localStorage.getItem(MODE_KEY);
-  if (stored === 'quiz' || stored === 'sentences') return stored;
-  return 'quiz';
+  if (stored === 'swipe' || stored === 'quiz' || stored === 'grammar' || stored === 'sentences') {
+    return stored;
+  }
+  return 'swipe';
 }
 
 const deck = useDeckStore();
+const grammar = useGrammarStore();
 const flashcard = ref<InstanceType<typeof Flashcard> | null>(null);
 const mode = ref<Mode>(readMode());
 const quizQuestion = ref<QuizQuestion | null>(null);
@@ -62,12 +70,24 @@ watch(sentenceQueue, saveSentenceQueue, { deep: true });
 watch(mode, (m) => {
   localStorage.setItem(MODE_KEY, m);
   if (m === 'sentences') ensureSentences();
+  if (m === 'grammar') ensureGrammar();
 });
 
 onMounted(async () => {
   if (!deck.loaded) await deck.loadAll();
   if (mode.value === 'sentences') ensureSentences();
+  if (mode.value === 'grammar') ensureGrammar();
 });
+
+async function ensureGrammar() {
+  if (!grammar.loaded) await grammar.ensureLoaded();
+  grammar.refreshNow();
+}
+
+async function onGrammarRated(item: GrammarItem, rating: GrammarRating) {
+  const progress = await submitGrammarReview(item.id, item.level, rating);
+  await grammar.record(item.id, progress, progress.reps === 1);
+}
 
 async function ensureSentences() {
   if (sentencePool.value || sentencesLoading.value) return;
@@ -200,8 +220,18 @@ const stepCount = computed(() =>
   <section class="mx-auto flex max-w-xl flex-col gap-8 px-6 pt-8">
     <PageHeader
       eyebrow="Révision"
-      :title="mode === 'quiz' ? 'Quiz' : 'Phrases'"
-      :subtitle="mode === 'quiz' ? 'Reconnais le mot dans son contexte.' : 'Remets les mots dans le bon ordre.'"
+      :title="
+        mode === 'swipe' ? 'Cartes' : mode === 'quiz' ? 'Quiz' : mode === 'grammar' ? 'Grammaire' : 'Phrases'
+      "
+      :subtitle="
+        mode === 'swipe'
+          ? 'Swipe pour réviser, façon flashcards.'
+          : mode === 'quiz'
+            ? 'Reconnais le mot dans son contexte.'
+            : mode === 'grammar'
+              ? 'Des phrases qui montent en difficulté.'
+              : 'Remets les mots dans le bon ordre.'
+      "
     >
       <template #action>
         <RouterLink to="/dashboard">
@@ -211,9 +241,13 @@ const stepCount = computed(() =>
     </PageHeader>
 
     <div class="flex items-baseline justify-between text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-      <span v-if="mode === 'quiz'">
+      <span v-if="mode === 'swipe' || mode === 'quiz'">
         <span class="font-editorial text-sm">{{ deck.dueReviewCards.length }}</span> à revoir ·
         <span class="font-editorial text-sm">{{ deck.queuedNewCards.length }}</span> nouveaux ({{ deck.newLeftToday }}/{{ deck.newCardsPerDay }})
+      </span>
+      <span v-else-if="mode === 'grammar'">
+        <span class="font-editorial text-sm">{{ grammar.dueCount }}</span> à revoir ·
+        <span class="font-editorial text-sm">{{ grammar.queuedNewCount }}</span> nouvelles
       </span>
       <span v-else>
         <span class="font-editorial text-sm">{{ sentenceQueue.length }}</span> en queue
@@ -223,7 +257,9 @@ const stepCount = computed(() =>
     <Tabs
       v-model="mode"
       :items="[
+        { value: 'swipe', label: 'Cartes' },
         { value: 'quiz', label: 'Quiz' },
+        { value: 'grammar', label: 'Grammaire' },
         { value: 'sentences', label: 'Phrases' },
       ]"
     />
@@ -232,7 +268,11 @@ const stepCount = computed(() =>
       Quiz indisponible (deck &lt; 4 cartes) — mode classique utilisé.
     </p>
 
-    <template v-if="current && useClassicFallback && intervals">
+    <template v-if="mode === 'swipe' && current">
+      <SwipeCard :key="current.id" :card="current" @rate="rate" />
+    </template>
+
+    <template v-else-if="current && useClassicFallback && intervals">
       <Flashcard ref="flashcard" :card="current" />
       <ReviewButtons
         v-if="flashcard?.revealed"
@@ -287,6 +327,46 @@ const stepCount = computed(() =>
             </p>
           </div>
         </div>
+      </div>
+    </template>
+
+    <template v-else-if="mode === 'grammar'">
+      <GrammarCard
+        v-if="grammar.currentItem"
+        :key="grammar.currentItem.id"
+        :item="grammar.currentItem"
+        @rated="onGrammarRated"
+      />
+      <div v-else-if="!grammar.loaded" class="py-12 text-center text-sm text-muted-foreground">
+        Chargement de la grammaire…
+      </div>
+      <div v-else class="flex flex-col items-center gap-5 py-10 text-center">
+        <p class="font-serif text-2xl italic">
+          <span v-if="grammar.newLeftToday === 0 && grammar.totalEligible > 0">Grammaire du jour terminée</span>
+          <span v-else>Pas encore débloquée</span>
+        </p>
+        <p class="max-w-xs text-sm text-muted-foreground">
+          <span v-if="grammar.newLeftToday === 0 && grammar.totalEligible > 0">
+            Reviens demain pour de nouvelles structures, ou révise tes mots.
+          </span>
+          <span v-else>
+            La grammaire d'un niveau s'ouvre quand tu maîtrises 30 % de son vocabulaire.
+            Continue d'apprendre tes mots HSK.
+          </span>
+        </p>
+        <div class="w-full max-w-xs space-y-2">
+          <div
+            v-for="lvl in grammar.levelStatus"
+            :key="lvl.level"
+            class="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm"
+          >
+            <span>HSK {{ lvl.level }}</span>
+            <Badge :variant="lvl.unlocked ? 'success' : 'default'">
+              {{ lvl.unlocked ? 'ouvert' : Math.round(lvl.mastery * 100) + '% / 30%' }}
+            </Badge>
+          </div>
+        </div>
+        <Button variant="outline" @click="mode = 'swipe'">Réviser mes mots</Button>
       </div>
     </template>
 
